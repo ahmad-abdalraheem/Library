@@ -1,0 +1,128 @@
+[
+  {
+    "Id": 1,
+    "Title": "Clean Code",
+    "Author": "Robert C. Martin",
+    "IsBorrowed": true,
+    "BorrowedDate": "2024-08-13T11:37:51.9501448+03:00",
+    "BorrowedBy": 9,
+    "MemberName": "Omar Saeed"
+  },
+  {
+    "Id": 2,
+    "Title": "Pragmatic Programmer",
+    "Author": "Andrew Hunt and David Thomas",
+    "IsBorrowed": false,
+    "BorrowedDate": null,
+    "BorrowedBy": null,
+    "MemberName": "Mohamed Ahmed"
+  },
+  {
+    "Id": 3,
+    "Title": "Design Patterns",
+    "Author": "Erich Gamma et al.",
+    "IsBorrowed": true,
+    "BorrowedDate": "2024-08-13T11:56:35.740266+03:00",
+    "BorrowedBy": 1,
+    "MemberName": "Ali Hassan"
+  },
+  {
+    "Id": 4,
+    "Title": "Refactoring",
+    "Author": "Martin Fowler",
+    "IsBorrowed": true,
+    "BorrowedDate": "2024-08-05T00:00:00",
+    "BorrowedBy": 1,
+    "MemberName": "Ali Hassan"
+  },
+  {
+    "Id": 5,
+    "Title": "Mythical Man-Month",
+    "Author": "Frederick P. Brooks Jr.",
+    "IsBorrowed": false,
+    "BorrowedDate": null,
+    "BorrowedBy": null,
+    "MemberName": null
+  },
+  {
+    "Id": 7,
+    "Title": "You Don\u0027t Know JS",
+    "Author": "Kyle Simpson",
+    "IsBorrowed": true,
+    "BorrowedDate": "2024-08-08T00:00:00",
+    "BorrowedBy": 5,
+    "MemberName": "Youssef Ali"
+  },
+  {
+    "Id": 8,
+    "Title": "Theory of Computation",
+    "Author": "Michael Sipser",
+    "IsBorrowed": false,
+    "BorrowedDate": null,
+    "BorrowedBy": null,
+    "MemberName": null
+  },
+  {
+    "Id": 9,
+    "Title": "Effective Java",
+    "Author": "Joshua Bloch",
+    "IsBorrowed": true,
+    "BorrowedDate": "2024-08-12T00:00:00",
+    "BorrowedBy": 4,
+    "MemberName": "Sara Abdullah"
+  },
+  {
+    "Id": 10,
+    "Title": "Algorithms",
+    "Author": "Thomas H. Cormen",
+    "IsBorrowed": false,
+    "BorrowedDate": null,
+    "BorrowedBy": null,
+    "MemberName": null
+  },
+  {
+    "Id": 11,
+    "Title": "Domain-Driven",
+    "Author": "Eric Evans",
+    "IsBorrowed": false,
+    "BorrowedDate": null,
+    "BorrowedBy": null,
+    "MemberName": null
+  },
+  {
+    "Id": 12,
+    "Title": "Continuous Delivery",
+    "Author": "Jez Humble and David Farley",
+    "IsBorrowed": true,
+    "BorrowedDate": "2024-08-07T00:00:00",
+    "BorrowedBy": 6,
+    "MemberName": "Noura Khalid"
+  },
+  {
+    "Id": 13,
+    "Title": "Head First Design",
+    "Author": "Eric Freeman",
+    "IsBorrowed": true,
+    "BorrowedDate": "2024-08-13T11:38:06.9378225+03:00",
+    "BorrowedBy": 1,
+    "MemberName": "Ali Hassan"
+  },
+  {
+    "Id": 14,
+    "Title": "Art of Programming",
+    "Author": "Donald E. Knuth",
+    "IsBorrowed": true,
+    "BorrowedDate": "2024-08-13T11:47:55.4923164+03:00",
+    "BorrowedBy": 6,
+    "MemberName": "Noura Khalid"
+  },
+  {
+    "Id": 15,
+    "Title": "Software Engenering",
+    "Author": "Titus Winters et al.",
+    "IsBorrowed": false,
+    "BorrowedDate": null,
+    "BorrowedBy": null,
+    "MemberName": "unknown"
+  }
+]
