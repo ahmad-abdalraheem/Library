@@ -1,12 +1,12 @@
 [
   {
     "Id": 1,
-    "Title": "Clean Code",
+    "Title": "Clean Code Arch",
     "Author": "Robert C. Martin",
     "IsBorrowed": true,
-    "BorrowedDate": "2024-08-13T11:37:51.9501448+03:00",
-    "BorrowedBy": 9,
-    "MemberName": "Omar Saeed"
+    "BorrowedDate": "2024-08-13T19:11:20.6111855+03:00",
+    "BorrowedBy": 14,
+    "MemberName": "Maryam Feras"
   },
   {
     "Id": 2,
@@ -93,27 +93,27 @@
     "Id": 12,
     "Title": "Continuous Delivery",
     "Author": "Jez Humble and David Farley",
-    "IsBorrowed": true,
-    "BorrowedDate": "2024-08-07T00:00:00",
-    "BorrowedBy": 6,
+    "IsBorrowed": false,
+    "BorrowedDate": null,
+    "BorrowedBy": null,
     "MemberName": "Noura Khalid"
   },
   {
     "Id": 13,
     "Title": "Head First Design",
     "Author": "Eric Freeman",
-    "IsBorrowed": true,
-    "BorrowedDate": "2024-08-13T11:38:06.9378225+03:00",
-    "BorrowedBy": 1,
+    "IsBorrowed": false,
+    "BorrowedDate": null,
+    "BorrowedBy": null,
     "MemberName": "Ali Hassan"
   },
   {
     "Id": 14,
     "Title": "Art of Programming",
     "Author": "Donald E. Knuth",
-    "IsBorrowed": true,
-    "BorrowedDate": "2024-08-13T11:47:55.4923164+03:00",
-    "BorrowedBy": 6,
+    "IsBorrowed": false,
+    "BorrowedDate": null,
+    "BorrowedBy": null,
     "MemberName": "Noura Khalid"
   },
   {
