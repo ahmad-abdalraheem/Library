@@ -4,10 +4,14 @@ using static System.Console;
 
 namespace Application.Service;
 
-public class BookService(IBookRepository bookRepository)
+public class BookService
 {
-	private readonly IBookRepository _bookRepository =
-		bookRepository ?? throw new ArgumentNullException(nameof(bookRepository));
+	private readonly IBookRepository _bookRepository;
+
+	public BookService(IBookRepository bookRepository)
+	{
+		_bookRepository = bookRepository ?? throw new ArgumentNullException(nameof(bookRepository));
+	}
 
 	public bool Add(Book book)
 	{

@@ -1,4 +1,15 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=41c3c11e_002D0933_002D410f_002D9000_002D6f5ae7b2eba6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=19ce85fc_002D9eba_002D48c8_002Dbb71_002D55ee57cc9818/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="LibraryServiceTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::F01A8A9E-8A3F-4620-B911-ED1FF064F5D3::net8.0::Application.Tests.LibraryServiceTests&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=41c3c11e_002D0933_002D410f_002D9000_002D6f5ae7b2eba6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d01a5b24_002D1bce_002D4423_002D965c_002D81688262ce02/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Update_ShouldReturnTrue_WhenUpdateSucceeds" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/home/ahmadabdalraheem/RiderProjects/Library/application.test" Presentation="&amp;lt;unit-test&amp;gt;\&amp;lt;application.test&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	
+	</wpf:ResourceDictionary>

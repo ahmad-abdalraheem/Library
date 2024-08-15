@@ -60,4 +60,17 @@ public class MemberService(IMemberRepository memberRepository)
 			return null;
 		}
 	}
+
+	public Member? GetById(int memberId)
+	{
+		try
+		{
+			return _memberRepository.GetById(memberId);
+		}
+		catch (Exception e)
+		{
+			WriteLine(e.Message);
+			return null;
+		}
+	}
 }
