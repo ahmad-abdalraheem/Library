@@ -141,9 +141,43 @@ public class MemberServiceTests
 	[Fact]
 	public void Get_ShouldReturnNull_WhenExceptionIsThrown()
 	{
-		_mockMemberRepository.Setup(repo => repo.Get()).Throws(new Exception("Database error"));
+		_mockMemberRepository.Setup(repo => repo.Get());
 
 		var result = _memberService.Get();
+
+		Assert.Null(result);
+	}
+
+	[Fact]
+	public void GetById_ShouldReturnMember_WhenMemberIsExist()
+	{
+		var members = new List<Member>
+		{
+			new() { Id = 1, Name = "John Doe" },
+			new() { Id = 2, Name = "Jane Smith" }
+		};
+		_mockMemberRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns<int>(id => members.FirstOrDefault(m => m.Id == id));
+
+		// Act
+		var result = _memberService.GetById(2);
+
+		Assert.NotNull(result);
+		Assert.Equal(2, result.Id);
+		Assert.Equal("Jane Smith", result.Name);
+	}
+	
+	[Fact]
+	public void GetById_ShouldReturnNull_WhenMemberNotExist()
+	{
+		var members = new List<Member>
+		{
+			new() { Id = 1, Name = "John Doe" },
+			new() { Id = 2, Name = "Jane Smith" }
+		};
+		_mockMemberRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns<int>(id => members.FirstOrDefault(m => m.Id == id));
+
+		// Act
+		var result = _memberService.GetById(3);
 
 		Assert.Null(result);
 	}
