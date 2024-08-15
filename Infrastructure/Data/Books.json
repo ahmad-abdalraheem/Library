@@ -1,7 +1,7 @@
 [
   {
     "Id": 1,
-    "Title": "Clean Code Arch",
+    "Title": "Clean Code",
     "Author": "Robert C. Martin",
     "IsBorrowed": true,
     "BorrowedDate": "2024-08-13T19:11:20.6111855+03:00",
