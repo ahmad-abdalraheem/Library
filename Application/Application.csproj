@@ -10,4 +10,14 @@
       <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="xunit.assert">
+        <HintPath>..\..\..\.nuget\packages\xunit.assert\2.5.3\lib\netstandard1.1\xunit.assert.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Moq" Version="4.20.70" />
+    </ItemGroup>
+
 </Project>
