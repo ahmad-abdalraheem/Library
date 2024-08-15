@@ -2,8 +2,9 @@ namespace ConsoleApp;
 
 public class UserInteraction
 {
-	public static int GetUserSelection(List<string> options,
-		string instruction = "Use Arrows(Up/Down) Then Enter to submit")
+	public static int GetUserSelection(
+			List<string> options, 
+			string instruction = "Use Arrows(Up/Down) Then Enter to submit")
 	{
 		var selection = 0;
 		Console.Write(Ansi.Clear);
@@ -16,10 +17,10 @@ public class UserInteraction
 		var loopControl = true;
 		while (loopControl)
 		{
-			var input = Console.ReadKey().Key;
-			switch (input.ToString())
+			ConsoleKey input = Console.ReadKey().Key;
+			switch (input)
 			{
-				case "UpArrow":
+				case ConsoleKey.UpArrow:
 					if (selection > 0)
 					{
 						Console.Write(Ansi.ClearLine + ">> " + options[selection]);
@@ -27,9 +28,8 @@ public class UserInteraction
 						Console.Write(Ansi.LineUp + Ansi.ClearLine + Ansi.Blue + ">> " + options[selection] +
 						              Ansi.Reset + Ansi.ToLineStart);
 					}
-
 					break;
-				case "DownArrow":
+				case ConsoleKey.DownArrow:
 					if (selection < options.Count - 1)
 					{
 						Console.Write(Ansi.ClearLine + ">> " + options[selection]);
@@ -37,14 +37,12 @@ public class UserInteraction
 						Console.Write(Ansi.LineDown + Ansi.ClearLine + Ansi.Blue + ">> " + options[selection] +
 						              Ansi.Reset + Ansi.ToLineStart);
 					}
-
 					break;
-				case "Enter":
+				case ConsoleKey.Enter:
 					loopControl = false;
 					break;
 			}
 		}
-
 		return selection;
 	}
 }
