@@ -47,7 +47,6 @@ public class MembersScreen(MemberService memberService)
 
 		return 0;
 	}
-
 	private void DisplayMembers()
 	{
 		var currentRow = 1;
@@ -65,7 +64,6 @@ public class MembersScreen(MemberService memberService)
 		Console.WriteLine("- Plus (+) Key -> Add a new record.");
 		Console.WriteLine("- Backspace Key -> Get back to Main Menu." + Reset);
 	}
-
 	private bool MemberOperation()
 	{
 		var selected = 0;
@@ -108,7 +106,6 @@ public class MembersScreen(MemberService memberService)
 					return true;
 			}
 	}
-
 	private Member AddMember()
 	{
 		Console.Clear();
@@ -128,7 +125,6 @@ public class MembersScreen(MemberService memberService)
 		Console.Write(HideCursor);
 		return member;
 	}
-
 	private Member UpdateMember(Member member)
 	{
 		Console.Clear();
@@ -142,13 +138,11 @@ public class MembersScreen(MemberService memberService)
 		member.Email = input == string.Empty ? member.Email : input;
 		return member;
 	}
-
 	private void PrintRow(Member member, int row, string color = "\x1b[0m")
 	{
 		Console.Write(color + CursorPosition(row, 1) + member.Id + CursorPosition(row, 5) + member.Name +
 		              CursorPosition(row, 30) + member.Email + Reset);
 	}
-
 	private void PrintRowL(Member member, int row, string color = "\x1b[0m")
 	{
 		Console.WriteLine(color + CursorPosition(row, 1) + member.Id + CursorPosition(row, 5) + member.Name +

@@ -39,7 +39,6 @@ public class BooksScreen(BookService bookService)
 
 		return 0;
 	}
-
 	private void DisplayBooks()
 	{
 		Console.Clear();
@@ -63,7 +62,6 @@ public class BooksScreen(BookService bookService)
 		Console.WriteLine("- Plus (+) Key -> Add a new record.");
 		Console.WriteLine("- Backspace Key -> Get back to Main Menu." + Ansi.Reset);
 	}
-
 	private bool BooksOperation()
 	{
 		var selected = 0;
@@ -112,7 +110,6 @@ public class BooksScreen(BookService bookService)
 					return true;
 			}
 	}
-
 	private Book AddBook()
 	{
 		Console.Clear();
@@ -148,7 +145,6 @@ public class BooksScreen(BookService bookService)
 		
 		return book;
 	}
-
 	private Book UpdateBook(Book book)
 	{
 		Console.Clear();
@@ -163,7 +159,6 @@ public class BooksScreen(BookService bookService)
 		Console.Write(Ansi.LineUp + Ansi.MoveRight(14) + book.Author + "\n");
 		return book;
 	}
-
 	private void PrintRow(Book? book, int row, string color)
 	{
 		Console.Write(color);
