@@ -4,26 +4,26 @@
     "Title": "Clean Code",
     "Author": "Robert C. Martin",
     "IsBorrowed": true,
-    "BorrowedDate": "2024-08-13T19:11:20.6111855+03:00",
-    "BorrowedBy": 14,
-    "MemberName": "Maryam Feras"
+    "BorrowedDate": "2024-08-18T12:26:16.0340261+03:00",
+    "BorrowedBy": 1,
+    "MemberName": "Ali Hassan"
   },
   {
     "Id": 2,
     "Title": "Pragmatic Programmer",
     "Author": "Andrew Hunt and David Thomas",
-    "IsBorrowed": false,
-    "BorrowedDate": null,
-    "BorrowedBy": null,
-    "MemberName": "Mohamed Ahmed"
+    "IsBorrowed": true,
+    "BorrowedDate": "2024-08-18T15:42:34.8371122+03:00",
+    "BorrowedBy": 14,
+    "MemberName": "Ahmad Abdelraheem"
   },
   {
     "Id": 3,
     "Title": "Design Patterns",
     "Author": "Erich Gamma et al.",
-    "IsBorrowed": true,
-    "BorrowedDate": "2024-08-13T11:56:35.740266+03:00",
-    "BorrowedBy": 1,
+    "IsBorrowed": false,
+    "BorrowedDate": null,
+    "BorrowedBy": null,
     "MemberName": "Ali Hassan"
   },
   {
@@ -111,9 +111,9 @@
     "Id": 14,
     "Title": "Art of Programming",
     "Author": "Donald E. Knuth",
-    "IsBorrowed": false,
-    "BorrowedDate": null,
-    "BorrowedBy": null,
+    "IsBorrowed": true,
+    "BorrowedDate": "2024-08-18T15:42:46.5935619+03:00",
+    "BorrowedBy": 2,
     "MemberName": "Noura Khalid"
   },
   {

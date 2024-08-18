@@ -19,7 +19,7 @@ public class LibraryService(BookService bookService,MemberService memberService)
 
 	public List<Book>? GetAvailable()
 	{
-		return (Books ?? bookService.Get())?.FindAll(b => b.IsBorrowed == false);
+		return (bookService.Get())?.FindAll(b => b.IsBorrowed == false);
 	}
 
 	public bool ReturnBook(int bookId)
