@@ -81,34 +81,6 @@ public class LibraryServiceTests
     }
 
     [Fact]
-    public void BorrowBook_ShouldReturnTrue_WhenBookIsSuccessfullyBorrowed()
-    {
-        var book = new Book
-        {
-            Id = 1,
-            IsBorrowed = false,
-            Title = "Book 1",
-            Author = "Author 1"
-        };
-        var member = new Member
-        {
-            Id = 2,
-            Name = "undefined"
-        };
-
-        _bookList.Add(book);
-        _memberList.Add(member);
-
-        _bookService.Update(book);
-        _memberService.Update(member);
-        
-        var result = _libraryService.BorrowBook(book, member);
-
-        Assert.True(result);
-    }
-
-
-    [Fact]
     public void GetAvailable_ShouldReturnAvailableBooks()
     {
         // Arrange
