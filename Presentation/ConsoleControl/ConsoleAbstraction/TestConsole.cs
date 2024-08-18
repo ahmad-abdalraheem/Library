@@ -8,9 +8,6 @@ public class TestConsole : IConsole
 	public Queue<string> Input { get; set; } = new();
 	public Queue<ConsoleKey> KeyInput { get; set; } = new();
 	public Queue<string> Output { get; } = new();
-
-	public void AddInput(string input) => Input.Enqueue(input);
-	public void AddKeyInput(ConsoleKey key) => KeyInput.Enqueue(key);
 	public void AddInputSequence(List<string> inputs)
 	{
 		foreach (string input in inputs)  Input.Enqueue(input);

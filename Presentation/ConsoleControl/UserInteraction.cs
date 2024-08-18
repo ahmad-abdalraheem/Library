@@ -1,16 +1,17 @@
 namespace ConsoleApp;
 
-public class UserInteraction
+public abstract class UserInteraction
 {
 	public static int GetUserSelection(
 			List<string> options,
 			IConsole console,
 			string instruction = "Use Arrows(Up/Down) Then Enter to submit")
 	{
+		if (options.Count == 0) throw new InvalidDataException();
 		var selection = 0;
 		console.Write(Ansi.Clear);
 		console.Write(Ansi.CursorPosition(1, 1));
-		foreach (var option in options) console.WriteLine($">> {option}");
+		foreach (string option in options) console.WriteLine($">> {option}");
 		console.WriteLine(Ansi.Yellow + instruction + Ansi.Reset);
 		console.Write(Ansi.CursorPosition(1, 1) + Ansi.ClearLine + Ansi.Blue + ">> " + options[0] + Ansi.Reset +
 		              Ansi.ToLineStart);
@@ -46,4 +47,5 @@ public class UserInteraction
 		}
 		return selection;
 	}
+
 }

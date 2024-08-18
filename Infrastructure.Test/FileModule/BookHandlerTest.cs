@@ -75,9 +75,4 @@ public class BookHandlerTests
 
 		Assert.Null(result);
 	}
-
-	public void Dispose()
-	{
-		if (File.Exists(_testFilePath)) File.Delete(_testFilePath);
-	}
 }

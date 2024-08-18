@@ -77,9 +77,4 @@ public class MemberHandlerTests
 
 		Assert.Null(result);
 	}
-
-	public void Dispose()
-	{
-		if (File.Exists(_testFilePath)) File.Delete(_testFilePath);
-	}
 }

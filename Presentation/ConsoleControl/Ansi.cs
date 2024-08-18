@@ -72,9 +72,4 @@ public struct Ansi
 	public static string HideCursor = "\x1b[?25l";
 
 	public static string ShowCursor = "\x1b[?25h";
-
-
-	public Ansi()
-	{
-	}
 }
