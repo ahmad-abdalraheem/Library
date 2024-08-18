@@ -124,12 +124,28 @@ public class BooksScreen(BookService bookService)
 			BorrowedBy = null,
 			BorrowedDate = null
 		};
-		
+
 		Console.Write(Ansi.Yellow + "Book Title : " + Ansi.Reset + Ansi.ShowCursor);
-		book.Title = Console.ReadLine()?.Trim() ?? "Undefined";
-		Console.Write(Ansi.Yellow + "Book Author : " + Ansi.Reset + Ansi.ShowCursor);
-		book.Author = Console.ReadLine()?.Trim() ?? "Undefined";
+		string? input = Console.ReadLine();
+		while(input?.Trim().Length == 0)
+		{
+			Console.Write(Ansi.Red + "Book Title Cannot be empty." + Ansi.LineUp + Ansi.ToLineStart);
+			Console.Write(Ansi.Yellow + "Book Title : " + Ansi.Reset + Ansi.ShowCursor);
+			input = Console.ReadLine();
+		}
+		book.Title = input ?? "undefined";
+		
+		Console.Write(Ansi.Yellow + Ansi.ClearLine + "Book Author : " + Ansi.Reset + Ansi.ShowCursor);
+		input = Console.ReadLine();
+		while(input?.Trim().Length == 0)
+		{
+			Console.Write(Ansi.Red + "Book Author Cannot be empty." + Ansi.LineUp + Ansi.ToLineStart);
+			Console.Write(Ansi.Yellow + "Book Author : " + Ansi.Reset + Ansi.ShowCursor);
+			input = Console.ReadLine();
+		}
+		book.Author = input ?? "undefined";
 		Console.Write(Ansi.HideCursor);
+		
 		return book;
 	}
 

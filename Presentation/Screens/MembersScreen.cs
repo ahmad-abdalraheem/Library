@@ -1,5 +1,6 @@
 using Application.Service;
 using Domain.Entities;
+using static ConsoleApp.Ansi;
 
 namespace ConsoleApp;
 
@@ -12,7 +13,7 @@ public class MembersScreen(MemberService memberService)
 		Console.Clear();
 		if (_members == null && (_members = memberService.Get()) == null)
 		{
-			Console.WriteLine(Ansi.Red + "Error While loading Data." + Ansi.Reset);
+			Console.WriteLine(Red + "Error While loading Data." + Reset);
 			Console.ReadKey();
 			return 0;
 		}
@@ -25,7 +26,7 @@ public class MembersScreen(MemberService memberService)
 			Console.Clear();
 			if (_members?.Count == 0)
 			{
-				Console.WriteLine(Ansi.Red + "No members found." + Ansi.Reset);
+				Console.WriteLine(Red + "No members found." + Reset);
 				switch (UserInteraction.GetUserSelection(["Add a new Member", "Back to main menu."]))
 				{
 					case 0:
@@ -50,25 +51,25 @@ public class MembersScreen(MemberService memberService)
 	private void DisplayMembers()
 	{
 		var currentRow = 1;
-		Console.Write(Ansi.CursorPosition(1, 1) + Ansi.Clear + Ansi.Yellow);
-		Console.Write($"ID{Ansi.CursorPosition(1, 5)}Name{Ansi.CursorPosition(1, 30)}Email");
-		Console.Write("\n__________________________________________________\n" + Ansi.Reset);
+		Console.Write(CursorPosition(1, 1) + Clear + Yellow);
+		Console.Write($"ID{CursorPosition(1, 5)}Name{CursorPosition(1, 30)}Email");
+		Console.Write("\n__________________________________________________\n" + Reset);
 		currentRow += 2;
 		if (_members != null)
 			foreach (var member in _members)
 				PrintRowL(member, currentRow++);
 
-		Console.WriteLine(Ansi.Yellow + "\nUse Arrow (Up/Down) To select Record, then press:");
+		Console.WriteLine(Yellow + "\nUse Arrow (Up/Down) To select Record, then press:");
 		Console.WriteLine("- Delete Key -> Delete selected record.");
 		Console.WriteLine("- Enter Key -> Update selected record.");
 		Console.WriteLine("- Plus (+) Key -> Add a new record.");
-		Console.WriteLine("- Backspace Key -> Get back to Main Menu." + Ansi.Reset);
+		Console.WriteLine("- Backspace Key -> Get back to Main Menu." + Reset);
 	}
 
 	private bool MemberOperation()
 	{
 		var selected = 0;
-		PrintRowL(_members![selected], 3, Ansi.Blue);
+		PrintRowL(_members![selected], 3, Blue);
 		while (true)
 			switch (Console.ReadKey(true).Key)
 			{
@@ -77,7 +78,7 @@ public class MembersScreen(MemberService memberService)
 					{
 						PrintRow(_members[selected], selected + 3);
 						selected--;
-						PrintRow(_members[selected], selected + 3, Ansi.Blue);
+						PrintRow(_members[selected], selected + 3, Blue);
 					}
 
 					break;
@@ -86,7 +87,7 @@ public class MembersScreen(MemberService memberService)
 					{
 						PrintRowL(_members[selected], selected + 3);
 						selected++;
-						PrintRowL(_members[selected], selected + 3, Ansi.Blue);
+						PrintRowL(_members[selected], selected + 3, Blue);
 					}
 
 					break;
@@ -112,23 +113,31 @@ public class MembersScreen(MemberService memberService)
 	{
 		Console.Clear();
 		var member = new Member { Name = "" };
-		Console.Write(Ansi.Yellow + "Member Name : " + Ansi.Reset + Ansi.ShowCursor);
-		member.Name = Console.ReadLine()?.Trim() ?? "Unknown";
-		Console.Write(Ansi.ClearLine + Ansi.Yellow + "Email : " + Ansi.Reset);
+		Console.Write(Yellow + "Member Name : " + Reset + ShowCursor);
+		string? input = Console.ReadLine();
+		while (input?.Trim().Length == 0)
+		{
+			Console.Write(Red + "Name Cannot be empty." + LineUp + ToLineStart + ClearLine);
+			Console.Write(Yellow + "Member Name : " + Reset + ShowCursor);
+			input = Console.ReadLine();
+		}
+		member.Name = input ?? "undefined";
+		
+		Console.Write(ClearLine + Yellow + "Email : " + Reset);
 		member.Email = Console.ReadLine()?.Trim();
-		Console.Write(Ansi.HideCursor);
+		Console.Write(HideCursor);
 		return member;
 	}
 
 	private Member UpdateMember(Member member)
 	{
 		Console.Clear();
-		Console.WriteLine(Ansi.Yellow + "Member ID : " + Ansi.Reset + member.Id);
-		Console.Write(Ansi.Yellow + "Member Name : " + Ansi.Reset);
+		Console.WriteLine(Yellow + "Member ID : " + Reset + member.Id);
+		Console.Write(Yellow + "Member Name : " + Reset);
 		string? input = Console.ReadLine()?.Trim() ?? "";
 		member.Name = input == string.Empty ? member.Name : input;
-		Console.Write(Ansi.LineUp + Ansi.MoveRight(14) + member.Name + "\n");
-		Console.Write(Ansi.Yellow + "Member Email : " + Ansi.Reset);
+		Console.Write(LineUp + MoveRight(14) + member.Name + "\n");
+		Console.Write(Yellow + "Member Email : " + Reset);
 		input = Console.ReadLine()?.Trim();
 		member.Email = input == string.Empty ? member.Email : input;
 		return member;
@@ -136,13 +145,13 @@ public class MembersScreen(MemberService memberService)
 
 	private void PrintRow(Member member, int row, string color = "\x1b[0m")
 	{
-		Console.Write(color + Ansi.CursorPosition(row, 1) + member.Id + Ansi.CursorPosition(row, 5) + member.Name +
-		              Ansi.CursorPosition(row, 30) + member.Email + Ansi.Reset);
+		Console.Write(color + CursorPosition(row, 1) + member.Id + CursorPosition(row, 5) + member.Name +
+		              CursorPosition(row, 30) + member.Email + Reset);
 	}
 
 	private void PrintRowL(Member member, int row, string color = "\x1b[0m")
 	{
-		Console.WriteLine(color + Ansi.CursorPosition(row, 1) + member.Id + Ansi.CursorPosition(row, 5) + member.Name +
-		                  Ansi.CursorPosition(row, 30) + member.Email + Ansi.Reset);
+		Console.WriteLine(color + CursorPosition(row, 1) + member.Id + CursorPosition(row, 5) + member.Name +
+		                  CursorPosition(row, 30) + member.Email + Reset);
 	}
 }
