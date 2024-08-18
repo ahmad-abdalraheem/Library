@@ -15,32 +15,35 @@ public static class Program
 		var bookService = host.Services.GetRequiredService<BookService>();
 		var libraryService = new LibraryService(bookService, memberService);
 
-		return RunMenu(memberService, bookService, libraryService);
+		IConsole console = new UserConsole();
+		return RunMenu(memberService, bookService, libraryService, console);
 	}
 
-	private static int RunMenu(MemberService memberService, BookService bookService, LibraryService libraryService)
+	public static int RunMenu(MemberService memberService, BookService bookService,
+					LibraryService libraryService, IConsole console)
 	{
+		
 		MembersScreen? membersScreen = null;
 		BooksScreen? booksScreen = null;
 		BorrowScreen? borrowScreen = null;
 
-		Console.WriteLine(Ansi.HideCursor);
-		List<string> options = new List<string> { "Members", "Books", "Return/Borrow book", "Exit" };
+		console.WriteLine(Ansi.HideCursor);
+		List<string> options = ["Members", "Books", "Return/Borrow book", "Exit"];
 
 		while (true)
 		{
-			Console.Clear();
-			var selection = UserInteraction.GetUserSelection(options);
+			console.Clear();
+			var selection = UserInteraction.GetUserSelection(options, console: console);
 			switch (selection)
 			{
 				case 0:
-					(membersScreen ??= new MembersScreen(memberService)).MembersMenu();
+					(membersScreen ??= new MembersScreen(memberService, console)).MembersMenu();
 					break;
 				case 1:
-					(booksScreen ??= new BooksScreen(bookService)).BooksMenu();
+					(booksScreen ??= new BooksScreen(bookService, console)).BooksMenu();
 					break;
 				case 2:
-					(borrowScreen ??= new BorrowScreen(libraryService, memberService)).BorrowBookMenu();
+					(borrowScreen ??= new BorrowScreen(libraryService, memberService, console)).BorrowBookMenu();
 					break;
 				default:
 					return 0;

@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace ConsoleApp;
 
-public class BooksScreen(BookService bookService)
+public class BooksScreen(BookService bookService, IConsole console)
 {
 	private List<Book>? _books = bookService.Get();
 
@@ -15,11 +15,11 @@ public class BooksScreen(BookService bookService)
 		var isExit = false;
 		while (!isExit)
 		{
-			Console.Clear();
+			console.Clear();
 			if (_books?.Count == 0)
 			{
-				Console.WriteLine(Ansi.Red + "No Books found." + Ansi.Reset);
-				switch (UserInteraction.GetUserSelection(["Add a new book", "Back to main menu."]))
+				console.WriteLine(Ansi.Red + "No Books found." + Ansi.Reset);
+				switch (UserInteraction.GetUserSelection(["Add a new book", "Back to main menu."], console))
 				{
 					case 0:
 						bookService.Add(AddBook());
@@ -41,33 +41,33 @@ public class BooksScreen(BookService bookService)
 	}
 	private void DisplayBooks()
 	{
-		Console.Clear();
+		console.Clear();
 		if (_books?.Count == 0)
 			return;
 		var currentRow = 1;
-		Console.Write($"ID{Ansi.CursorPosition(1, 5)}Title{Ansi.CursorPosition(1, 40)}Author" +
+		console.Write($"ID{Ansi.CursorPosition(1, 5)}Title{Ansi.CursorPosition(1, 40)}Author" +
 		              $"{Ansi.CursorPosition(1, 67)}Status{Ansi.CursorPosition(1, 79)}");
-		Console.Write("\n______________________________________________________________\n" + Ansi.Reset);
+		console.Write("\n______________________________________________________________\n" + Ansi.Reset);
 		currentRow += 2;
 		if (_books != null)
 			foreach (var book in _books)
 			{
 				PrintRow(book, currentRow++, Ansi.Reset);
-				Console.WriteLine();
+				console.WriteLine();
 			}
 
-		Console.WriteLine(Ansi.Yellow + "\nUse Arrow (Up/Down) To select Record, then press:");
-		Console.WriteLine("- Delete Key -> Delete selected record.");
-		Console.WriteLine("- Enter Key -> Update selected record.");
-		Console.WriteLine("- Plus (+) Key -> Add a new record.");
-		Console.WriteLine("- Backspace Key -> Get back to Main Menu." + Ansi.Reset);
+		console.WriteLine(Ansi.Yellow + "\nUse Arrow (Up/Down) To select Record, then press:");
+		console.WriteLine("- Delete Key -> Delete selected record.");
+		console.WriteLine("- Enter Key -> Update selected record.");
+		console.WriteLine("- Plus (+) Key -> Add a new record.");
+		console.WriteLine("- Backspace Key -> Get back to Main Menu." + Ansi.Reset);
 	}
 	private bool BooksOperation()
 	{
 		var selected = 0;
 		PrintRow(_books?[selected], 3, Ansi.Blue);
 		while (true)
-			switch (Console.ReadKey(true).Key)
+			switch (console.ReadKey())
 			{
 				case ConsoleKey.UpArrow:
 					if (selected > 0)
@@ -112,7 +112,7 @@ public class BooksScreen(BookService bookService)
 	}
 	private Book AddBook()
 	{
-		Console.Clear();
+		console.Clear();
 		Book book = new Book
 		{
 			Title = "NA", 
@@ -122,47 +122,47 @@ public class BooksScreen(BookService bookService)
 			BorrowedDate = null
 		};
 
-		Console.Write(Ansi.Yellow + "Book Title : " + Ansi.Reset + Ansi.ShowCursor);
-		string? input = Console.ReadLine();
+		console.Write(Ansi.Yellow + "Book Title : " + Ansi.Reset + Ansi.ShowCursor);
+		string? input = console.ReadLine();
 		while(input?.Trim().Length == 0)
 		{
-			Console.Write(Ansi.Red + "Book Title Cannot be empty." + Ansi.LineUp + Ansi.ToLineStart);
-			Console.Write(Ansi.Yellow + "Book Title : " + Ansi.Reset + Ansi.ShowCursor);
-			input = Console.ReadLine();
+			console.Write(Ansi.Red + "Book Title Cannot be empty." + Ansi.LineUp + Ansi.ToLineStart);
+			console.Write(Ansi.Yellow + "Book Title : " + Ansi.Reset + Ansi.ShowCursor);
+			input = console.ReadLine();
 		}
 		book.Title = input ?? "undefined";
 		
-		Console.Write(Ansi.Yellow + Ansi.ClearLine + "Book Author : " + Ansi.Reset + Ansi.ShowCursor);
-		input = Console.ReadLine();
+		console.Write(Ansi.Yellow + Ansi.ClearLine + "Book Author : " + Ansi.Reset + Ansi.ShowCursor);
+		input = console.ReadLine();
 		while(input?.Trim().Length == 0)
 		{
-			Console.Write(Ansi.Red + "Book Author Cannot be empty." + Ansi.LineUp + Ansi.ToLineStart);
-			Console.Write(Ansi.Yellow + "Book Author : " + Ansi.Reset + Ansi.ShowCursor);
-			input = Console.ReadLine();
+			console.Write(Ansi.Red + "Book Author Cannot be empty." + Ansi.LineUp + Ansi.ToLineStart);
+			console.Write(Ansi.Yellow + "Book Author : " + Ansi.Reset + Ansi.ShowCursor);
+			input = console.ReadLine();
 		}
 		book.Author = input ?? "undefined";
-		Console.Write(Ansi.HideCursor);
+		console.Write(Ansi.HideCursor);
 		
 		return book;
 	}
 	private Book UpdateBook(Book book)
 	{
-		Console.Clear();
-		Console.WriteLine(Ansi.Yellow + "Book ID : " + Ansi.Reset + book.Id);
-		Console.Write(Ansi.Yellow + "Book Title : " + Ansi.Reset);
-		string input = Console.ReadLine()?.Trim() ?? "";
+		console.Clear();
+		console.WriteLine(Ansi.Yellow + "Book ID : " + Ansi.Reset + book.Id);
+		console.Write(Ansi.Yellow + "Book Title : " + Ansi.Reset);
+		string input = console.ReadLine()?.Trim() ?? "";
 		book.Title = input == string.Empty ? book.Title : input;
-		Console.Write(Ansi.LineUp + Ansi.MoveRight(13) + book.Title + "\n");
-		Console.Write(Ansi.Yellow + "Book Author : " + Ansi.Reset);
-		input = Console.ReadLine()?.Trim() ?? "";
+		console.Write(Ansi.LineUp + Ansi.MoveRight(13) + book.Title + "\n");
+		console.Write(Ansi.Yellow + "Book Author : " + Ansi.Reset);
+		input = console.ReadLine()?.Trim() ?? "";
 		book.Author = input == string.Empty ? book.Author : input;
-		Console.Write(Ansi.LineUp + Ansi.MoveRight(14) + book.Author + "\n");
+		console.Write(Ansi.LineUp + Ansi.MoveRight(14) + book.Author + "\n");
 		return book;
 	}
 	private void PrintRow(Book? book, int row, string color)
 	{
-		Console.Write(color);
-		Console.Write(Ansi.CursorPosition(row, 1) + book?.Id + Ansi.CursorPosition(row, 5) +
+		console.Write(color);
+		console.Write(Ansi.CursorPosition(row, 1) + book?.Id + Ansi.CursorPosition(row, 5) +
 		              (book?.Title.Length > 30 ? book.Title.Substring(0, 30) + "..." : book?.Title) +
 		              Ansi.CursorPosition(row, 40) +
 		              (book?.Author.Length > 25 ? book.Author.Substring(0, 22) + "..." : book?.Author) +
@@ -170,6 +170,6 @@ public class BooksScreen(BookService bookService)
 		              ((bool) book?.IsBorrowed ? $"{Ansi.Red}Borrowed" : $"{Ansi.Green}Available")
 		              + Ansi.CursorPosition(row, 79) + color +
 		              (book.BorrowedDate != null ? book.BorrowedDate.Value.ToShortDateString() : "***"));
-		Console.Write(Ansi.Reset);
+		console.Write(Ansi.Reset);
 	}
 }
