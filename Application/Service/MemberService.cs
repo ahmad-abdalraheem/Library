@@ -9,7 +9,7 @@ public class MemberService(IMemberRepository memberRepository)
 	private readonly IMemberRepository _memberRepository =
 		memberRepository ?? throw new ArgumentNullException(nameof(memberRepository));
 
-	public bool Add(Member member)
+	public virtual bool Add(Member member)
 	{
 		try
 		{
@@ -22,7 +22,7 @@ public class MemberService(IMemberRepository memberRepository)
 		}
 	}
 
-	public bool Update(Member member)
+	public virtual bool Update(Member member)
 	{
 		try
 		{
@@ -35,7 +35,7 @@ public class MemberService(IMemberRepository memberRepository)
 		}
 	}
 
-	public bool Delete(int memberId)
+	public virtual bool Delete(int memberId)
 	{
 		try
 		{
@@ -48,29 +48,8 @@ public class MemberService(IMemberRepository memberRepository)
 		}
 	}
 
-	public List<Member>? Get()
-	{
-		try
-		{
-			return _memberRepository.Get();
-		}
-		catch (Exception e)
-		{
-			WriteLine(e.Message);
-			return null;
-		}
-	}
+	// should I use try-catch? while member handler already catch the exception and return null
+	public virtual List<Member>? Get() => _memberRepository.Get();
 
-	public Member? GetById(int memberId)
-	{
-		try
-		{
-			return _memberRepository.GetById(memberId);
-		}
-		catch (Exception e)
-		{
-			WriteLine(e.Message);
-			return null;
-		}
-	}
+	public virtual Member? GetById(int memberId) => _memberRepository.GetById(memberId);
 }

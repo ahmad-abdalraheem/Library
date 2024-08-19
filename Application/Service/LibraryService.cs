@@ -7,7 +7,7 @@ public class LibraryService(BookService bookService,MemberService memberService)
 	private List<Book>? Books = bookService.Get();
 	private List<Member>? Members = memberService.Get();
 
-	public List<Book>? GetBorrowed()
+	public virtual List<Book>? GetBorrowed()
 	{
 			var borrowedBooks = (Books ?? bookService.Get())?.FindAll(b => b.IsBorrowed);
 			Members ??= memberService.Get();
@@ -17,18 +17,16 @@ public class LibraryService(BookService bookService,MemberService memberService)
 			return borrowedBooks;
 	}
 
-	public List<Book>? GetAvailable()
+	public virtual List<Book>? GetAvailable()
 	{
 		return (bookService.Get())?.FindAll(b => b.IsBorrowed == false);
 	}
 
-	public bool ReturnBook(int bookId)
+	public virtual bool ReturnBook(int bookId)
 	{
 		Books ??= bookService.Get();
-		if (Books == null)
-			return false;
-		var book = Books.Find(b => b.Id == bookId);
-		if (book == null)
+		Book? book = null;
+		if ((Books == null || Books.Count == 0) || (book ??= Books?.Find(b => b.Id == bookId)) == null)
 			return false;
 		book.IsBorrowed = false;
 		book.BorrowedBy = null;
@@ -36,10 +34,10 @@ public class LibraryService(BookService bookService,MemberService memberService)
 		return bookService.Update(book);
 	}
 
-	public bool BorrowBook(Book book, Member member)
+	public virtual bool BorrowBook(Book book, Member member)
 	{
 		Books ??= bookService.Get();
-		if (Books == null)
+		if (Books == null || Books.Count == 0) 
 			return false;
 		if (memberService.GetById(member.Id) == null)
 			return false;

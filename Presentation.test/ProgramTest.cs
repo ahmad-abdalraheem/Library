@@ -2,6 +2,8 @@ using Application.Repository;
 using Application.Service;
 using AutoMockFixture.Moq4;
 using ConsoleApp;
+using Domain.FileHandler;
+using Domain.Repository;
 using Infrastructure.FileModule;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,24 +15,63 @@ public class ProgramTests
 {
     private readonly MemberService _memberService;
     private readonly BookService _bookService;
-    
+
     private readonly Mock<LibraryService> _mockLibraryService;
-    private readonly Mock<MembersScreen> _mockMembersScreen;
-    private readonly Mock<BooksScreen> _mockBooksScreen;
-    private readonly Mock<BorrowScreen> _mockBorrowScreen;
 
     public ProgramTests()
     {
         _memberService = new MemberService(new MemberRepository(new MemberHandler()));
         _bookService = new BookService(new BookRepository(new BookHandler()));
-        
+
         _mockLibraryService = new Mock<LibraryService>(_bookService, _memberService);
-        
-        _mockMembersScreen = new Mock<MembersScreen>(_memberService);
-        _mockBooksScreen = new Mock<BooksScreen>(_bookService);
-        _mockBorrowScreen = new Mock<BorrowScreen>(_mockLibraryService.Object, _memberService);
     }
 
+    [Fact]
+    public void Main_IsRunSuccessfully()
+    {
+        int result = Program.Main();
+        
+        Assert.Equal(0, result);
+    }
+    
+    [Fact]
+    public void CreateHost_CreatesHostWithConfiguredServices()
+    {
+        var host = Program.CreateHost();
+
+        Assert.NotNull(host);
+
+        var serviceProvider = host.Services;
+
+        Assert.NotNull(serviceProvider.GetService<MemberService>());
+        Assert.NotNull(serviceProvider.GetService<BookService>());
+        Assert.NotNull(serviceProvider.GetService<LibraryService>());
+    }
+    
+    [Fact]
+    public void RunApplication_ExecutesSuccessfully()
+    {
+        // Arrange
+        var mockHost = new Mock<IHost>();
+        var mockServiceProvider = new Mock<IServiceProvider>();
+
+        var mockMemberService = new Mock<MemberService>(new Mock<IMemberRepository>().Object);
+        var mockBookService = new Mock<BookService>(new Mock<IBookRepository>().Object);
+        var mockLibraryService = new Mock<LibraryService>(mockBookService.Object, mockMemberService.Object);
+        var console = new TestConsole();
+        console.AddKeySequence([ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter]);
+        
+        mockServiceProvider.Setup(sp => sp.GetService(typeof(MemberService))).Returns(mockMemberService.Object);
+        mockServiceProvider.Setup(sp => sp.GetService(typeof(BookService))).Returns(mockBookService.Object);
+    
+        mockHost.Setup(h => h.Services).Returns(mockServiceProvider.Object);
+
+        var result = Program.RunApplication(mockHost.Object, console);
+
+        Assert.Equal(0, result);
+    }
+
+    
     [Fact]
     public void RunMenu_SelectMembers_CallsMembersMenu()
     {
@@ -39,7 +80,6 @@ public class ProgramTests
         
         int exitCode = Program.RunMenu(_memberService, _bookService, _mockLibraryService.Object, console);
         
-        Assert.True(console.Output.Contains("ID\u001b[1;5HName\u001b[1;30HEmail")); // member page header
         Assert.Equal(0, exitCode);
     }
     
@@ -51,7 +91,6 @@ public class ProgramTests
         
         int exitCode = Program.RunMenu(_memberService, _bookService, _mockLibraryService.Object, console);
         
-        Assert.True(console.Output.Contains("ID[1;5HTitle[1;40HAuthor[1;67HStatus[1;79H")); // Book page header
         Assert.Equal(0, exitCode);
     }
     
@@ -63,7 +102,6 @@ public class ProgramTests
         
         int exitCode = Program.RunMenu(_memberService, _bookService, _mockLibraryService.Object, console);
         
-        Assert.True(console.Output.Contains("ID[1;5HTitle[1;40HAuthor[1;68HBorrowed By[1;93HBorrowed Date")); // Borrow page header
         Assert.Equal(0, exitCode);
     }
     

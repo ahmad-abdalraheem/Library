@@ -27,14 +27,13 @@ namespace ConsoleApp.Tests
             var output = _stringWriter.ToString();
             Assert.Contains("Hello, World!", output);
         }
-
+        
         [Fact]
         public void WriteLine_WritesLineToConsole()
         {
-            // Act
             _userConsole.WriteLine("Hello, World!");
-
-            // Assert
+            _userConsole.WriteLine();
+            
             var output = _stringWriter.ToString();
             Assert.Contains("Hello, World!", output);
             Assert.EndsWith(Environment.NewLine, output);
@@ -59,5 +58,13 @@ namespace ConsoleApp.Tests
 
             Assert.Equal(input, result);
         }
+
+        [Fact]
+        public void AddKeySequence_ThrowsException()
+        {
+            Assert.Throws<NotImplementedException>(
+                () => _userConsole.AddKeySequence([]));
+        }
+
     }
 }

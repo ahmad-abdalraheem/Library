@@ -25,12 +25,12 @@ public class BorrowScreen(LibraryService libraryService, MemberService memberSer
 			if (BorrowedBooks?.Count == 0)
 			{
 				console.Clear();
-				console.Write(Red + "No Borrowed books. press on ADD button to borrow one or Backspace to get back." +
-				              Reset);
-				switch (UserInteraction.GetUserSelection(["Borrow new book.", "Get Back."], console))
+				console.WriteLine(Red + "No Borrowed Books found." + Reset);
+				switch (UserInteraction.GetUserSelection(["Borrow new book.", "Back to main menu."], console))
 				{
 					case 0:
 						BorrowBook();
+						BorrowedBooks = libraryService.GetBorrowed();
 						break;
 					default:
 						isExit = true;
@@ -101,20 +101,21 @@ public class BorrowScreen(LibraryService libraryService, MemberService memberSer
 			return;
 		}
 
-		var book = SelectAvailableBook();
+		Book? book = SelectAvailableBook();
 		if (book == null)
 			return;
-		var member = SelectMember();
+		Member? member = SelectMember();
 		if (member == null)
 			return;
 		libraryService.BorrowBook(book, member);
+		AvailableBooks.Remove(book);
+		BorrowedBooks?.Add(book);
 	}
 
 	private void DisplayBorrowedBooks()
 	{
 		console.Clear();
-		if (BorrowedBooks?.Count == 0)
-			return;
+		
 		var currentRow = 1;
 		console.Write($"ID{CursorPosition(1, 5)}Title{CursorPosition(1, 40)}Author" +
 		              $"{CursorPosition(1, 68)}Borrowed By" +

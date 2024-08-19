@@ -19,7 +19,7 @@ public class BookServiceTests
 	[Fact]
 	public void Add_ShouldReturnTrue_WhenAddSucceeds()
 	{
-		var book = new Book
+		var book = new Book ("", "")
 		{
 			Id = 1,
 			Title = "Test Book",
@@ -35,7 +35,7 @@ public class BookServiceTests
 	[Fact]
 	public void Add_ShouldReturnFalse_WhenAddFails()
 	{
-		var book = new Book
+		var book = new Book ("", "")
 		{
 			Id = 1,
 			Title = "Test Book",
@@ -51,7 +51,7 @@ public class BookServiceTests
 	[Fact]
 	public void Add_ShouldReturnFalse_WhenExceptionIsThrown()
 	{
-		var book = new Book
+		var book = new Book ("", "")
 		{
 			Id = 1,
 			Title = "Test Book",
@@ -67,7 +67,7 @@ public class BookServiceTests
 	[Fact]
 	public void Update_ShouldReturnTrue_WhenUpdateSucceeds()
 	{
-		var book = new Book
+		var book = new Book ("", "")
 		{
 			Id = 1,
 			Title = "Updated Book",
@@ -83,7 +83,7 @@ public class BookServiceTests
 	[Fact]
 	public void Update_ShouldReturnFalse_WhenUpdateFails()
 	{
-		var book = new Book
+		var book = new Book ("", "")
 		{
 			Id = 1,
 			Title = "Updated Book",
@@ -99,7 +99,7 @@ public class BookServiceTests
 	[Fact]
 	public void Update_ShouldReturnFalse_WhenExceptionIsThrown()
 	{
-		var book = new Book
+		var book = new Book ("", "")
 		{
 			Id = 1,
 			Title = "Updated Book",
@@ -147,13 +147,13 @@ public class BookServiceTests
 	{
 		var books = new List<Book>
 		{
-			new()
+			new ("", "")
 			{
 				Id = 1,
 				Title = "Book 1",
 				Author = "Author 1"
 			},
-			new()
+			new ("", "")
 			{
 				Id = 2,
 				Title = "Book 2",

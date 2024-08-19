@@ -9,11 +9,10 @@ public abstract class UserInteraction
 	{
 		if (options.Count == 0) throw new InvalidDataException();
 		var selection = 0;
-		console.Write(Ansi.Clear);
-		console.Write(Ansi.CursorPosition(1, 1));
+		console.Write(Ansi.CursorPosition(2, 1));
 		foreach (string option in options) console.WriteLine($">> {option}");
 		console.WriteLine(Ansi.Yellow + instruction + Ansi.Reset);
-		console.Write(Ansi.CursorPosition(1, 1) + Ansi.ClearLine + Ansi.Blue + ">> " + options[0] + Ansi.Reset +
+		console.Write(Ansi.CursorPosition(2, 1) + Ansi.ClearLine + Ansi.Blue + ">> " + options[0] + Ansi.Reset +
 		              Ansi.ToLineStart);
 
 		var loopControl = true;
