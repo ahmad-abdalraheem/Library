@@ -22,9 +22,9 @@ public class BookRepositoryTests
 	{
 		var initialBooks = new List<Book>
 		{
-			new() { Id = 1, Title = "Existing Book", Author = "Existing Author" }
+			new("Existing Book", "Existing Author") { Id = 1, Title = "Existing Book", Author = "Existing Author" }
 		};
-		var newBook = new Book { Title = "New Book", Author = "New Author" };
+		var newBook = new Book ("New Book", "New Author") {Id = 2, Title = "New Book", Author = "New Author"};
 		_mockBookHandler.Setup(handler => handler.Read()).Returns(initialBooks);
 		_mockBookHandler.Setup(handler => handler.Write(It.IsAny<List<Book>>())).Returns(true);
 
@@ -41,9 +41,9 @@ public class BookRepositoryTests
 	{
 		var initialBooks = new List<Book>
 		{
-			new() { Id = 1, Title = "Old Title", Author = "Old Author" }
+			new("", "") { Id = 1, Title = "Old Title", Author = "Old Author" }
 		};
-		var updatedBook = new Book { Id = 1, Title = "Updated Title", Author = "Updated Author" };
+		var updatedBook = new Book ("", "") { Id = 1, Title = "Updated Title", Author = "Updated Author" };
 		_mockBookHandler.Setup(handler => handler.Read()).Returns(initialBooks);
 		_mockBookHandler.Setup(handler => handler.Write(It.IsAny<List<Book>>())).Returns(true);
 
@@ -59,8 +59,8 @@ public class BookRepositoryTests
 	{
 		var initialBooks = new List<Book>
 		{
-			new() { Id = 1, Title = "Book to Remove", Author = "Author" },
-			new() { Id = 2, Title = "Another Book", Author = "Author" }
+			new("", "") { Id = 1, Title = "Book to Remove", Author = "Author" },
+			new("", "") { Id = 2, Title = "Another Book", Author = "Author" }
 		};
 		_mockBookHandler.Setup(handler => handler.Read()).Returns(initialBooks);
 		_mockBookHandler.Setup(handler => handler.Write(It.IsAny<List<Book>>())).Returns(true);
@@ -78,8 +78,8 @@ public class BookRepositoryTests
 	{
 		var books = new List<Book>
 		{
-			new() { Id = 1, Title = "Book 1", Author = "Author 1" },
-			new() { Id = 2, Title = "Book 2", Author = "Author 2" }
+			new("", "") { Id = 1, Title = "Book 1", Author = "Author 1" },
+			new("", "") { Id = 2, Title = "Book 2", Author = "Author 2" }
 		};
 		_mockBookHandler.Setup(handler => handler.Read()).Returns(books);
 
@@ -96,8 +96,8 @@ public class BookRepositoryTests
 	{
 		var books = new List<Book>
 		{
-			new() { Id = 1, Title = "Book 1", Author = "Author 1" },
-			new() { Id = 2, Title = "Book 2", Author = "Author 2" }
+			new("", "") { Id = 1, Title = "Book 1", Author = "Author 1" },
+			new("", "") { Id = 2, Title = "Book 2", Author = "Author 2" }
 		};
 		_mockBookHandler.Setup(handler => handler.Read()).Returns(books);
 
@@ -113,7 +113,7 @@ public class BookRepositoryTests
 	{
 		_mockBookHandler.Setup(handler => handler.Read()).Returns((List<Book>)null);
 
-		Assert.Throws<FailWhileLoadingFileException>(() => _bookRepository.Add(new Book
+		Assert.Throws<FailWhileLoadingFileException>(() => _bookRepository.Add(new Book ("", "")
 		{
 			Title = "undefined",
 			Author = "undefined"
@@ -125,7 +125,7 @@ public class BookRepositoryTests
 	{
 		_mockBookHandler.Setup(handler => handler.Read()).Returns((List<Book>)null);
 
-		Assert.Throws<FailWhileLoadingFileException>(() => _bookRepository.Update(new Book
+		Assert.Throws<FailWhileLoadingFileException>(() => _bookRepository.Update(new Book ("", "")
 		{
 			Title = "undefined",
 			Author = "undefined"

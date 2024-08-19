@@ -11,18 +11,16 @@ public class MembersScreen(MemberService memberService, IConsole console)
 	public int MembersMenu()
 	{
 		console.Clear();
-		if (_members == null && (_members = memberService.Get()) == null)
-		{
-			console.WriteLine(Red + "Error While loading Data." + Reset);
-			console.ReadKey();
-			return 0;
-		}
 
 		var isExit = false;
 		while (!isExit)
 		{
-			if (_members == null)
+			if ((_members ??= memberService?.Get()) == null)
+			{
+				console.WriteLine(Red + "Error While loading Data." + Reset);
+				console.ReadKey();
 				return 0;
+			}
 			console.Clear();
 			if (_members?.Count == 0)
 			{

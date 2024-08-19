@@ -2,6 +2,10 @@ namespace ConsoleApp;
 
 public class UserConsole : IConsole
 {
+	public void AddKeySequence(List<ConsoleKey> keys)
+	{
+		throw new NotImplementedException();
+	}
 	public string? ReadLine(string? output = null) => Console.ReadLine();
 	
 	public ConsoleKey ReadKey(ConsoleKeyInfo? key = null) => Console.ReadKey(true).Key;

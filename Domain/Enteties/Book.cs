@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
-public class Book(string title = "Undefined", string author = "undefined")
+public class Book(string title, string author)
 {
 	public int Id { get; set; }
 	public required string Title { get; set; } = title;

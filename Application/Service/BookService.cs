@@ -13,7 +13,7 @@ public class BookService
 		_bookRepository = bookRepository ?? throw new ArgumentNullException(nameof(bookRepository));
 	}
 
-	public bool Add(Book book)
+	public virtual bool Add(Book book)
 	{
 		try
 		{
@@ -26,7 +26,7 @@ public class BookService
 		}
 	}
 
-	public bool Update(Book book)
+	public virtual bool Update(Book book)
 	{
 		try
 		{
@@ -39,7 +39,7 @@ public class BookService
 		}
 	}
 
-	public bool Delete(int bookId)
+	public virtual bool Delete(int bookId)
 	{
 		try
 		{
@@ -52,7 +52,7 @@ public class BookService
 		}
 	}
 
-	public List<Book>? Get()
+	public virtual List<Book>? Get()
 	{
 		try
 		{

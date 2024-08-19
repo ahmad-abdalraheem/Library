@@ -22,7 +22,7 @@ public class BookHandlerTests
 	{
 		var books = new List<Book>
 		{
-			new() { Id = 1, Title = "Book 1", Author = "Author 1" }
+			new("", "") { Id = 1, Title = "Book 1", Author = "Author 1" }
 		};
 
 		var result = _bookHandler.Write(books);
@@ -41,7 +41,7 @@ public class BookHandlerTests
 	{
 		var books = new List<Book>
 		{
-			new() { Id = 1, Title = "Book 1", Author = "Author 1" }
+			new("", "") { Id = 1, Title = "Book 1", Author = "Author 1" }
 		};
 		File.WriteAllText(_testFilePath, JsonSerializer.Serialize(books));
 

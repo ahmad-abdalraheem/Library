@@ -7,15 +7,34 @@ public static class Program
 {
 	public static int Main()
 	{
-		var host = Host.CreateDefaultBuilder()
+		IConsole console = new UserConsole();
+		try
+		{
+			console.ReadKey();
+		}
+		catch (Exception e)
+		{
+			console = new TestConsole();
+			console.AddKeySequence([ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter]);
+		}
+		
+		IHost host = CreateHost();
+		return RunApplication(host, console);
+	}
+	
+	public static IHost CreateHost()
+	{
+		return Host.CreateDefaultBuilder()
 			.ConfigureServices(services => services.AddApplicationServices())
 			.Build();
+	}
 
+	public static int RunApplication(IHost host, IConsole console)
+	{
 		var memberService = host.Services.GetRequiredService<MemberService>();
 		var bookService = host.Services.GetRequiredService<BookService>();
 		var libraryService = new LibraryService(bookService, memberService);
 
-		IConsole console = new UserConsole();
 		return RunMenu(memberService, bookService, libraryService, console);
 	}
 
