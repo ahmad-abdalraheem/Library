@@ -4,16 +4,16 @@ namespace Application.Service;
 
 public class LibraryService(BookService bookService,MemberService memberService)
 {
-	private List<Book>? Books = bookService.Get();
-	private List<Member>? Members = memberService.Get();
+	private List<Book>? _books = bookService.Get();
+	private List<Member>? _members = memberService.Get();
 
 	public virtual List<Book>? GetBorrowed()
 	{
-			var borrowedBooks = (Books ?? bookService.Get())?.FindAll(b => b.IsBorrowed);
-			Members ??= memberService.Get();
+			var borrowedBooks = (_books ?? bookService.Get())?.FindAll(b => b.IsBorrowed);
+			_members ??= memberService.Get();
 			if (borrowedBooks != null)
 				foreach (var book in borrowedBooks)
-					book.MemberName = Members?.Find(m => m.Id == book.BorrowedBy)?.Name ?? "unknown";
+					book.MemberName = _members?.Find(m => m.Id == book.BorrowedBy)?.Name ?? "unknown";
 			return borrowedBooks;
 	}
 
@@ -24,9 +24,9 @@ public class LibraryService(BookService bookService,MemberService memberService)
 
 	public virtual bool ReturnBook(int bookId)
 	{
-		Books ??= bookService.Get();
+		_books ??= bookService.Get();
 		Book? book = null;
-		if ((Books == null || Books.Count == 0) || (book ??= Books?.Find(b => b.Id == bookId)) == null)
+		if ((_books == null || _books.Count == 0) || (book ??= _books?.Find(b => b.Id == bookId)) == null)
 			return false;
 		book.IsBorrowed = false;
 		book.BorrowedBy = null;
@@ -36,15 +36,15 @@ public class LibraryService(BookService bookService,MemberService memberService)
 
 	public virtual bool BorrowBook(Book book, Member member)
 	{
-		Books ??= bookService.Get();
-		if (Books == null || Books.Count == 0) 
+		_books ??= bookService.Get();
+		if (_books == null || _books.Count == 0) 
 			return false;
 		if (memberService.GetById(member.Id) == null)
 			return false;
 		book.IsBorrowed = true;
 		book.BorrowedBy = member.Id;
 		book.BorrowedDate = DateTime.Now;
-		Books[Books.FindIndex(b => b.Id == book.Id)] = book;
+		_books[_books.FindIndex(b => b.Id == book.Id)] = book;
 
 		return bookService.Update(book);
 	}

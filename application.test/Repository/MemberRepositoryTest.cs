@@ -1,7 +1,7 @@
-using Application.Exceptions;
+using Domain.Exceptions;
+using Application.FileHandler;
 using Application.Repository;
 using Domain.Entities;
-using Domain.FileHandler;
 using Moq;
 
 namespace Application.Tests;
@@ -9,11 +9,11 @@ namespace Application.Tests;
 public class MemberRepositoryTests
 {
 	private readonly MemberRepository _memberRepository;
-	private readonly Mock<IMemberHandler> _mockMemberHandler;
+	private readonly Mock<IFileHandler<Member>> _mockMemberHandler;
 
 	public MemberRepositoryTests()
 	{
-		_mockMemberHandler = new Mock<IMemberHandler>();
+		_mockMemberHandler = new Mock<IFileHandler<Member>>();
 		_memberRepository = new MemberRepository(_mockMemberHandler.Object);
 	}
 

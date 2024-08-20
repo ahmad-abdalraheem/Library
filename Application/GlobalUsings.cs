@@ -1,3 +1,3 @@
 // Global using directives
 
-global using Application.Exceptions;
+global using Domain.Exceptions;

@@ -12,16 +12,18 @@ public static class Program
 		{
 			console.ReadKey();
 		}
-		catch (Exception e)
+		catch (Exception)
 		{
 			console = new TestConsole();
-			console.AddKeySequence([ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter]);
+			console.AddKeySequence([
+				ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter
+			]);
 		}
-		
+
 		IHost host = CreateHost();
 		return RunApplication(host, console);
 	}
-	
+
 	public static IHost CreateHost()
 	{
 		return Host.CreateDefaultBuilder()
@@ -39,9 +41,8 @@ public static class Program
 	}
 
 	public static int RunMenu(MemberService memberService, BookService bookService,
-					LibraryService libraryService, IConsole console)
+		LibraryService libraryService, IConsole console)
 	{
-		
 		MembersScreen? membersScreen = null;
 		BooksScreen? booksScreen = null;
 		BorrowScreen? borrowScreen = null;

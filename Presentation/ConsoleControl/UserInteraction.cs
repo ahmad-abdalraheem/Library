@@ -3,9 +3,9 @@ namespace ConsoleApp;
 public abstract class UserInteraction
 {
 	public static int GetUserSelection(
-			List<string> options,
-			IConsole console,
-			string instruction = "Use Arrows(Up/Down) Then Enter to submit")
+		List<string> options,
+		IConsole console,
+		string instruction = "Use Arrows(Up/Down) Then Enter to submit")
 	{
 		if (options.Count == 0) throw new InvalidDataException();
 		var selection = 0;
@@ -29,6 +29,7 @@ public abstract class UserInteraction
 						console.Write(Ansi.LineUp + Ansi.ClearLine + Ansi.Blue + ">> " + options[selection] +
 						              Ansi.Reset + Ansi.ToLineStart);
 					}
+
 					break;
 				case ConsoleKey.DownArrow:
 					if (selection < options.Count - 1)
@@ -38,13 +39,14 @@ public abstract class UserInteraction
 						console.Write(Ansi.LineDown + Ansi.ClearLine + Ansi.Blue + ">> " + options[selection] +
 						              Ansi.Reset + Ansi.ToLineStart);
 					}
+
 					break;
 				case ConsoleKey.Enter:
 					loopControl = false;
 					break;
 			}
 		}
+
 		return selection;
 	}
-
 }

@@ -4,14 +4,9 @@ using static System.Console;
 
 namespace Application.Service;
 
-public class BookService
+public class BookService(IBookRepository bookRepository)
 {
-	private readonly IBookRepository _bookRepository;
-
-	public BookService(IBookRepository bookRepository)
-	{
-		_bookRepository = bookRepository ?? throw new ArgumentNullException(nameof(bookRepository));
-	}
+	private readonly IBookRepository _bookRepository = bookRepository ?? throw new ArgumentNullException(nameof(bookRepository));
 
 	public virtual bool Add(Book book)
 	{

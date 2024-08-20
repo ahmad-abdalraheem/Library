@@ -2,7 +2,7 @@ using Application.Repository;
 using Application.Service;
 using AutoMockFixture.Moq4;
 using ConsoleApp;
-using Domain.FileHandler;
+using Domain.Entities;
 using Domain.Repository;
 using Infrastructure.FileModule;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,106 +13,118 @@ using Xunit.Abstractions;
 
 public class ProgramTests
 {
-    private readonly MemberService _memberService;
-    private readonly BookService _bookService;
+	private readonly MemberService _memberService;
+	private readonly BookService _bookService;
 
-    private readonly Mock<LibraryService> _mockLibraryService;
+	private readonly Mock<LibraryService> _mockLibraryService;
 
-    public ProgramTests()
-    {
-        _memberService = new MemberService(new MemberRepository(new MemberHandler()));
-        _bookService = new BookService(new BookRepository(new BookHandler()));
+	public ProgramTests()
+	{
+		string memberFilePath = "/home/ahmadabdalraheem/RiderProjects/Library/Infrastructure/Data/Members.json";
+		string bookFilePath = "/home/ahmadabdalraheem/RiderProjects/Library/Infrastructure/Data/Books.json";
 
-        _mockLibraryService = new Mock<LibraryService>(_bookService, _memberService);
-    }
+		_memberService = new MemberService(new MemberRepository(new FileHandler<Member>(memberFilePath)));
+		_bookService = new BookService(new BookRepository(new FileHandler<Book>(bookFilePath)));
 
-    [Fact]
-    public void Main_IsRunSuccessfully()
-    {
-        int result = Program.Main();
-        
-        Assert.Equal(0, result);
-    }
-    
-    [Fact]
-    public void CreateHost_CreatesHostWithConfiguredServices()
-    {
-        var host = Program.CreateHost();
+		_mockLibraryService = new Mock<LibraryService>(_bookService, _memberService);
+	}
 
-        Assert.NotNull(host);
+	[Fact]
+	public void Main_IsRunSuccessfully()
+	{
+		int result = Program.Main();
 
-        var serviceProvider = host.Services;
+		Assert.Equal(0, result);
+	}
 
-        Assert.NotNull(serviceProvider.GetService<MemberService>());
-        Assert.NotNull(serviceProvider.GetService<BookService>());
-        Assert.NotNull(serviceProvider.GetService<LibraryService>());
-    }
-    
-    [Fact]
-    public void RunApplication_ExecutesSuccessfully()
-    {
-        // Arrange
-        var mockHost = new Mock<IHost>();
-        var mockServiceProvider = new Mock<IServiceProvider>();
+	[Fact]
+	public void CreateHost_CreatesHostWithConfiguredServices()
+	{
+		var host = Program.CreateHost();
 
-        var mockMemberService = new Mock<MemberService>(new Mock<IMemberRepository>().Object);
-        var mockBookService = new Mock<BookService>(new Mock<IBookRepository>().Object);
-        var mockLibraryService = new Mock<LibraryService>(mockBookService.Object, mockMemberService.Object);
-        var console = new TestConsole();
-        console.AddKeySequence([ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter]);
-        
-        mockServiceProvider.Setup(sp => sp.GetService(typeof(MemberService))).Returns(mockMemberService.Object);
-        mockServiceProvider.Setup(sp => sp.GetService(typeof(BookService))).Returns(mockBookService.Object);
-    
-        mockHost.Setup(h => h.Services).Returns(mockServiceProvider.Object);
+		Assert.NotNull(host);
 
-        var result = Program.RunApplication(mockHost.Object, console);
+		var serviceProvider = host.Services;
 
-        Assert.Equal(0, result);
-    }
+		Assert.NotNull(serviceProvider.GetService<MemberService>());
+		Assert.NotNull(serviceProvider.GetService<BookService>());
+		Assert.NotNull(serviceProvider.GetService<LibraryService>());
+	}
 
-    
-    [Fact]
-    public void RunMenu_SelectMembers_CallsMembersMenu()
-    {
-        TestConsole console = new TestConsole();
-        console.AddKeySequence([ConsoleKey.Enter, ConsoleKey.Backspace, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter]);
-        
-        int exitCode = Program.RunMenu(_memberService, _bookService, _mockLibraryService.Object, console);
-        
-        Assert.Equal(0, exitCode);
-    }
-    
-    [Fact]
-    public void RunMenu_SelectBooks_CallsBooksMenu()
-    {
-        TestConsole console = new TestConsole();
-        console.AddKeySequence([ConsoleKey.DownArrow, ConsoleKey.Enter, ConsoleKey.Backspace, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter]);
-        
-        int exitCode = Program.RunMenu(_memberService, _bookService, _mockLibraryService.Object, console);
-        
-        Assert.Equal(0, exitCode);
-    }
-    
-    [Fact]
-    public void RunMenu_SelectBorrowReturn_CallsBorrowMenu()
-    {
-        TestConsole console = new TestConsole();
-        console.AddKeySequence([ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter, ConsoleKey.Backspace, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter]);
-        
-        int exitCode = Program.RunMenu(_memberService, _bookService, _mockLibraryService.Object, console);
-        
-        Assert.Equal(0, exitCode);
-    }
-    
-    [Fact]
-    public void RunMenu_SelectExit_EndProgram()
-    {
-        TestConsole console = new TestConsole();
-        console.AddKeySequence([ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter]);
-        
-        int exitCode = Program.RunMenu(_memberService, _bookService, _mockLibraryService.Object, console);
-        
-        Assert.Equal(0, exitCode);
-    }
+	[Fact]
+	public void RunApplication_ExecutesSuccessfully()
+	{
+		// Arrange
+		var mockHost = new Mock<IHost>();
+		var mockServiceProvider = new Mock<IServiceProvider>();
+
+		var mockMemberService = new Mock<MemberService>(new Mock<IMemberRepository>().Object);
+		var mockBookService = new Mock<BookService>(new Mock<IBookRepository>().Object);
+		var mockLibraryService = new Mock<LibraryService>(mockBookService.Object, mockMemberService.Object);
+		var console = new TestConsole();
+		console.AddKeySequence([ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter]);
+
+		mockServiceProvider.Setup(sp => sp.GetService(typeof(MemberService))).Returns(mockMemberService.Object);
+		mockServiceProvider.Setup(sp => sp.GetService(typeof(BookService))).Returns(mockBookService.Object);
+
+		mockHost.Setup(h => h.Services).Returns(mockServiceProvider.Object);
+
+		var result = Program.RunApplication(mockHost.Object, console);
+
+		Assert.Equal(0, result);
+	}
+
+
+	[Fact]
+	public void RunMenu_SelectMembers_CallsMembersMenu()
+	{
+		TestConsole console = new TestConsole();
+		console.AddKeySequence([
+			ConsoleKey.Enter, ConsoleKey.Backspace, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.DownArrow,
+			ConsoleKey.Enter
+		]);
+
+		int exitCode = Program.RunMenu(_memberService, _bookService, _mockLibraryService.Object, console);
+
+		Assert.Equal(0, exitCode);
+	}
+
+	[Fact]
+	public void RunMenu_SelectBooks_CallsBooksMenu()
+	{
+		TestConsole console = new TestConsole();
+		console.AddKeySequence([
+			ConsoleKey.DownArrow, ConsoleKey.Enter, ConsoleKey.Backspace, ConsoleKey.DownArrow, ConsoleKey.DownArrow,
+			ConsoleKey.DownArrow, ConsoleKey.Enter
+		]);
+
+		int exitCode = Program.RunMenu(_memberService, _bookService, _mockLibraryService.Object, console);
+
+		Assert.Equal(0, exitCode);
+	}
+
+	[Fact]
+	public void RunMenu_SelectBorrowReturn_CallsBorrowMenu()
+	{
+		TestConsole console = new TestConsole();
+		console.AddKeySequence([
+			ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter, ConsoleKey.Backspace, ConsoleKey.DownArrow,
+			ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter
+		]);
+
+		int exitCode = Program.RunMenu(_memberService, _bookService, _mockLibraryService.Object, console);
+
+		Assert.Equal(0, exitCode);
+	}
+
+	[Fact]
+	public void RunMenu_SelectExit_EndProgram()
+	{
+		TestConsole console = new TestConsole();
+		console.AddKeySequence([ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter]);
+
+		int exitCode = Program.RunMenu(_memberService, _bookService, _mockLibraryService.Object, console);
+
+		Assert.Equal(0, exitCode);
+	}
 }

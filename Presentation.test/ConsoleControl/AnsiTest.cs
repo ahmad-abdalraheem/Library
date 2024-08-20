@@ -79,6 +79,6 @@ public class AnsiTest
 	public void CursorControlCommands()
 	{
 		Assert.Equal("\x1b[?25l", Ansi.HideCursor);
-		Assert.Equal("\x1b[?25h", Ansi.ShowCursor); 
+		Assert.Equal("\x1b[?25h", Ansi.ShowCursor);
 	}
 }
