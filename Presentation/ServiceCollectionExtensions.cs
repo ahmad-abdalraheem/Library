@@ -1,9 +1,8 @@
 using Application.Repository;
 using Application.Service;
-using Application.FileHandler;
+using Infrastructure.DataHandler;
 using Domain.Entities;
 using Domain.Repository;
-using Infrastructure.FileModule;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ConsoleApp;
@@ -18,8 +17,8 @@ public static class ServiceCollectionExtensions
 		services.AddSingleton<IMemberRepository, MemberRepository>();
 		services.AddSingleton<IBookRepository, BookRepository>();
 
-		services.AddSingleton<IFileHandler<Member>>(provider => new FileHandler<Member>(memberFilePath));
-		services.AddSingleton<IFileHandler<Book>>(provider => new FileHandler<Book>(bookFilePath));
+		services.AddSingleton<IDataHandler<Member>>(provider => new DataHandler<Member>(memberFilePath));
+		services.AddSingleton<IDataHandler<Book>>(provider => new DataHandler<Book>(bookFilePath));
 
 		services.AddTransient<MemberService>();
 		services.AddTransient<BookService>();

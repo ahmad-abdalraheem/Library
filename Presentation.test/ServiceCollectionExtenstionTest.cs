@@ -1,4 +1,4 @@
-using Application.FileHandler;
+using Infrastructure.DataHandler;
 using Application.Repository;
 using Application.Service;
 using Domain.Entities;
@@ -21,7 +21,7 @@ namespace ConsoleApp.Tests
 			Assert.NotNull(memberRepository);
 			Assert.IsType<MemberRepository>(memberRepository);
 
-			var memberHandler = serviceProvider.GetService<IFileHandler<Member>>();
+			var memberHandler = serviceProvider.GetService<IDataHandler<Member>>();
 			Assert.NotNull(memberHandler);
 
 			var memberService = serviceProvider.GetService<MemberService>();
@@ -31,7 +31,7 @@ namespace ConsoleApp.Tests
 			Assert.NotNull(bookRepository);
 			Assert.IsType<BookRepository>(bookRepository);
 
-			var bookHandler = serviceProvider.GetService<IFileHandler<Book>>();
+			var bookHandler = serviceProvider.GetService<IDataHandler<Book>>();
 			Assert.NotNull(bookHandler);
 
 			var bookService = serviceProvider.GetService<BookService>();

@@ -1,10 +1,10 @@
-using Application.FileHandler;
 using Domain.Entities;
 using Domain.Repository;
+using Infrastructure.DataHandler;
 
 namespace Application.Repository;
 
-public class BookRepository(IFileHandler<Book> bookHandler) : IBookRepository
+public class BookRepository(IDataHandler<Book> bookHandler) : IBookRepository
 {
 	private List<Book>? _books;
 

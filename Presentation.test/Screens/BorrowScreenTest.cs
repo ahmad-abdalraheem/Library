@@ -1,7 +1,7 @@
 using Application.Repository;
 using Application.Service;
 using Domain.Entities;
-using Infrastructure.FileModule;
+using Infrastructure.DataHandler;
 using Moq;
 
 namespace ConsoleApp.Tests;
@@ -18,8 +18,8 @@ public class BorrowScreenTest
 
 	public BorrowScreenTest()
 	{
-		_mockBookService = new Mock<BookService>(new BookRepository(new FileHandler<Book>("books.json")));
-		_mockMemberService = new Mock<MemberService>(new MemberRepository(new FileHandler<Member>("members.json")));
+		_mockBookService = new Mock<BookService>(new BookRepository(new DataHandler<Book>("books.json")));
+		_mockMemberService = new Mock<MemberService>(new MemberRepository(new DataHandler<Member>("members.json")));
 		_mockLibraryService = new Mock<LibraryService>(_mockBookService.Object, _mockMemberService.Object);
 		_borrowScreen = new BorrowScreen(_mockLibraryService.Object, _mockMemberService.Object, _testConsole);
 	}

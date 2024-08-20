@@ -1,7 +1,7 @@
 using Application.Repository;
 using Application.Service;
 using Domain.Entities;
-using Infrastructure.FileModule;
+using Infrastructure.DataHandler;
 using Moq;
 
 namespace ConsoleApp.Tests
@@ -15,7 +15,7 @@ namespace ConsoleApp.Tests
 
 		public MembersScreenTests()
 		{
-			_mockMemberService = new Mock<MemberService>(new MemberRepository(new FileHandler<Member>("members.json")));
+			_mockMemberService = new Mock<MemberService>(new MemberRepository(new DataHandler<Member>("members.json")));
 			_membersScreen = new MembersScreen(_mockMemberService.Object, _testConsole);
 		}
 

@@ -4,7 +4,7 @@ using AutoMockFixture.Moq4;
 using ConsoleApp;
 using Domain.Entities;
 using Domain.Repository;
-using Infrastructure.FileModule;
+using Infrastructure.DataHandler;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Moq;
@@ -23,8 +23,8 @@ public class ProgramTests
 		string memberFilePath = "/home/ahmadabdalraheem/RiderProjects/Library/Infrastructure/Data/Members.json";
 		string bookFilePath = "/home/ahmadabdalraheem/RiderProjects/Library/Infrastructure/Data/Books.json";
 
-		_memberService = new MemberService(new MemberRepository(new FileHandler<Member>(memberFilePath)));
-		_bookService = new BookService(new BookRepository(new FileHandler<Book>(bookFilePath)));
+		_memberService = new MemberService(new MemberRepository(new DataHandler<Member>(memberFilePath)));
+		_bookService = new BookService(new BookRepository(new DataHandler<Book>(bookFilePath)));
 
 		_mockLibraryService = new Mock<LibraryService>(_bookService, _memberService);
 	}
