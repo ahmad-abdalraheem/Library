@@ -1,47 +1,44 @@
+using Application.FileHandler;
 using Application.Repository;
 using Application.Service;
-using Domain.FileHandler;
+using Domain.Entities;
 using Domain.Repository;
-using Infrastructure.FileModule;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace ConsoleApp.Tests
 {
-    public class ServiceCollectionExtensionsTests
-    {
-        [Fact]
-        public void AddApplicationServices_RegistersServicesCorrectly()
-        {
-            var services = new ServiceCollection();
-            
-            services.AddApplicationServices();
-            var serviceProvider = services.BuildServiceProvider();
+	public class ServiceCollectionExtensionsTests
+	{
+		[Fact]
+		public void AddApplicationServices_RegistersServicesCorrectly()
+		{
+			var services = new ServiceCollection();
 
-            var memberRepository = serviceProvider.GetService<IMemberRepository>();
-            Assert.NotNull(memberRepository);
-            Assert.IsType<MemberRepository>(memberRepository);
+			services.AddApplicationServices();
+			var serviceProvider = services.BuildServiceProvider();
 
-            var memberHandler = serviceProvider.GetService<IMemberHandler>();
-            Assert.NotNull(memberHandler);
-            Assert.IsType<MemberHandler>(memberHandler);
+			var memberRepository = serviceProvider.GetService<IMemberRepository>();
+			Assert.NotNull(memberRepository);
+			Assert.IsType<MemberRepository>(memberRepository);
 
-            var memberService = serviceProvider.GetService<MemberService>();
-            Assert.NotNull(memberService);
+			var memberHandler = serviceProvider.GetService<IFileHandler<Member>>();
+			Assert.NotNull(memberHandler);
 
-            var bookRepository = serviceProvider.GetService<IBookRepository>();
-            Assert.NotNull(bookRepository);
-            Assert.IsType<BookRepository>(bookRepository);
+			var memberService = serviceProvider.GetService<MemberService>();
+			Assert.NotNull(memberService);
 
-            var bookHandler = serviceProvider.GetService<IBookHandler>();
-            Assert.NotNull(bookHandler);
-            Assert.IsType<BookHandler>(bookHandler);
+			var bookRepository = serviceProvider.GetService<IBookRepository>();
+			Assert.NotNull(bookRepository);
+			Assert.IsType<BookRepository>(bookRepository);
 
-            var bookService = serviceProvider.GetService<BookService>();
-            Assert.NotNull(bookService);
+			var bookHandler = serviceProvider.GetService<IFileHandler<Book>>();
+			Assert.NotNull(bookHandler);
 
-            var libraryService = serviceProvider.GetService<LibraryService>();
-            Assert.NotNull(libraryService);
-        }
-    }
+			var bookService = serviceProvider.GetService<BookService>();
+			Assert.NotNull(bookService);
+
+			var libraryService = serviceProvider.GetService<LibraryService>();
+			Assert.NotNull(libraryService);
+		}
+	}
 }

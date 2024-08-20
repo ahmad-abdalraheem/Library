@@ -21,6 +21,7 @@ public class MembersScreen(MemberService memberService, IConsole console)
 				console.ReadKey();
 				return 0;
 			}
+
 			console.Clear();
 			if (_members?.Count == 0)
 			{
@@ -45,6 +46,7 @@ public class MembersScreen(MemberService memberService, IConsole console)
 
 		return 0;
 	}
+
 	private void DisplayMembers()
 	{
 		var currentRow = 1;
@@ -62,6 +64,7 @@ public class MembersScreen(MemberService memberService, IConsole console)
 		console.WriteLine("- Plus (+) Key -> Add a new record.");
 		console.WriteLine("- Backspace Key -> Get back to Main Menu." + Reset);
 	}
+
 	private bool MemberOperation()
 	{
 		var selected = 0;
@@ -104,6 +107,7 @@ public class MembersScreen(MemberService memberService, IConsole console)
 					return true;
 			}
 	}
+
 	private Member AddMember()
 	{
 		console.Clear();
@@ -116,13 +120,15 @@ public class MembersScreen(MemberService memberService, IConsole console)
 			console.Write(Yellow + "Member Name : " + Reset + ShowCursor);
 			input = console.ReadLine();
 		}
+
 		member.Name = input ?? "undefined";
-		
+
 		console.Write(ClearLine + Yellow + "Email : " + Reset);
 		member.Email = console.ReadLine()?.Trim();
 		console.Write(HideCursor);
 		return member;
 	}
+
 	private Member UpdateMember(Member member)
 	{
 		console.Clear();
@@ -136,11 +142,13 @@ public class MembersScreen(MemberService memberService, IConsole console)
 		member.Email = input == string.Empty ? member.Email : input;
 		return member;
 	}
+
 	private void PrintRow(Member member, int row, string color = "\x1b[0m")
 	{
 		console.Write(color + CursorPosition(row, 1) + member.Id + CursorPosition(row, 5) + member.Name +
 		              CursorPosition(row, 30) + member.Email + Reset);
 	}
+
 	private void PrintRowL(Member member, int row, string color = "\x1b[0m")
 	{
 		console.WriteLine(color + CursorPosition(row, 1) + member.Id + CursorPosition(row, 5) + member.Name +

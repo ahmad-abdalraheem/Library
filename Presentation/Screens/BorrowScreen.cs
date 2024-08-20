@@ -94,7 +94,7 @@ public class BorrowScreen(LibraryService libraryService, MemberService memberSer
 			return;
 		}
 
-		if ((Members ??= memberService.Get()) == null )
+		if ((Members ??= memberService.Get()) == null)
 		{
 			console.WriteLine(Red + "Error while loading data" + Reset);
 			console.ReadKey();
@@ -115,7 +115,7 @@ public class BorrowScreen(LibraryService libraryService, MemberService memberSer
 	private void DisplayBorrowedBooks()
 	{
 		console.Clear();
-		
+
 		var currentRow = 1;
 		console.Write($"ID{CursorPosition(1, 5)}Title{CursorPosition(1, 40)}Author" +
 		              $"{CursorPosition(1, 68)}Borrowed By" +

@@ -15,66 +15,70 @@ public class BorrowScreenTest
 	private List<Member>? _membersList = new List<Member>();
 	private readonly BorrowScreen _borrowScreen;
 	private readonly TestConsole _testConsole = new TestConsole();
-	
+
 	public BorrowScreenTest()
 	{
-		_mockBookService = new Mock<BookService>(new BookRepository(new BookHandler()));
-		_mockMemberService = new Mock<MemberService>(new MemberRepository(new MemberHandler()));
+		_mockBookService = new Mock<BookService>(new BookRepository(new FileHandler<Book>("books.json")));
+		_mockMemberService = new Mock<MemberService>(new MemberRepository(new FileHandler<Member>("members.json")));
 		_mockLibraryService = new Mock<LibraryService>(_mockBookService.Object, _mockMemberService.Object);
 		_borrowScreen = new BorrowScreen(_mockLibraryService.Object, _mockMemberService.Object, _testConsole);
 	}
+
 	private bool SearchInOutput(string searchString)
 	{
 		foreach (string line in _testConsole.Output)
 		{
-			if(line.Contains(searchString))
+			if (line.Contains(searchString))
 				return true;
 		}
+
 		return false;
 	}
-	
+
 	[Fact]
 	public void BorrowBookMenu_ShouldDisplayErrorMessage_IfBorrowedBookIsNull()
 	{
 		// Arrange
 		_mockLibraryService.Setup(ls => ls.GetBorrowed()).Returns(() => null);
-		
+
 		// Act
 		_testConsole.AddKeySequence([ConsoleKey.Enter]);
 		int result = _borrowScreen.BorrowBookMenu();
-		
+
 		// Assert
 		Assert.Equal(0, result);
 	}
-	
+
 	[Fact]
 	public void BorrowBookMenu_ShouldDisplayExitOption_IfBorrowedBookIsEmpty()
 	{
 		// Arrange
 		_mockLibraryService.Setup(ls => ls.GetBorrowed()).Returns(new List<Book>());
-		
+
 		// Act
 		_testConsole.AddKeySequence([ConsoleKey.DownArrow, ConsoleKey.Enter]);
 		int result = _borrowScreen.BorrowBookMenu();
-		
+
 		// Assert
 		Assert.True(SearchInOutput("No Borrowed Books found"));
 		Assert.True(SearchInOutput("Borrow new book"));
 		Assert.True(SearchInOutput("Back to main menu"));
 		Assert.Equal(0, result);
 	}
-	
+
 	[Fact]
 	public void BorrowBookMenu_ShouldDisplayBorrowBookOption_IfBorrowedBookIsEmpty()
 	{
 		// Arrange
-		_booksList = [
-			new Book("Book 1", "Author 1") {Id = 1, Title = "Book 1", Author = "Author 1" ,IsBorrowed = false},
-			new Book("Book 2", "Author 1") {Id = 2, Title = "Book 2", Author = "Author 2" ,IsBorrowed = false},
+		_booksList =
+		[
+			new Book() { Id = 1, Title = "Book 1", Author = "Author 1", IsBorrowed = false },
+			new Book() { Id = 2, Title = "Book 2", Author = "Author 2", IsBorrowed = false },
 		];
-		_membersList = [
-			new Member() {Id = 1, Name = "Member 1", Email = "member1@email.com"},
-			new Member() {Id = 1, Name = "Member 2", Email = "member2@email.com"}
+		_membersList =
+		[
+			new Member() { Id = 1, Name = "Member 1", Email = "member1@email.com" },
+			new Member() { Id = 1, Name = "Member 2", Email = "member2@email.com" }
 		];
 		_mockLibraryService.Setup(ls => ls.GetBorrowed()).Returns(_booksList?.FindAll(b => b.IsBorrowed));
 		_mockLibraryService.Setup(ls => ls.GetAvailable()).Returns(_booksList?.FindAll(b => b.IsBorrowed == false));
@@ -88,13 +92,15 @@ public class BorrowScreenTest
 			})
 			.Returns(true);
 		_mockMemberService.Setup(ms => ms.Get()).Returns(_membersList);
-		
-		
+
+
 		// Act
-		_testConsole.AddKeySequence([ConsoleKey.Enter, ConsoleKey.DownArrow, ConsoleKey.UpArrow, ConsoleKey.Enter,
-										ConsoleKey.DownArrow, ConsoleKey.UpArrow, ConsoleKey.Enter, ConsoleKey.Backspace]);
+		_testConsole.AddKeySequence([
+			ConsoleKey.Enter, ConsoleKey.DownArrow, ConsoleKey.UpArrow, ConsoleKey.Enter,
+			ConsoleKey.DownArrow, ConsoleKey.UpArrow, ConsoleKey.Enter, ConsoleKey.Backspace
+		]);
 		int result = _borrowScreen.BorrowBookMenu();
-		
+
 		// Assert
 		Assert.True(_booksList[0].IsBorrowed);
 		Assert.Equal(0, result);
@@ -104,36 +110,40 @@ public class BorrowScreenTest
 	public void BorrowBookMenu_ShouldDisplayBorrowedBooks_IfBorrowedBookIsNotEmpty()
 	{
 		// Arrange
-		_booksList = [
-			new Book("Book 1", "Author 1") {Id = 1, Title = "Book 1", Author = "Author 1" ,IsBorrowed = true},
-			new Book("Book 2", "Author 1") {Id = 2, Title = "Book 2", Author = "Author 2" ,IsBorrowed = true},
+		_booksList =
+		[
+			new Book() { Id = 1, Title = "Book 1", Author = "Author 1", IsBorrowed = true },
+			new Book() { Id = 2, Title = "Book 2", Author = "Author 2", IsBorrowed = true },
 		];
-		_membersList = [
-			new Member() {Id = 1, Name = "Member 1", Email = "member1@email.com"},
-			new Member() {Id = 1, Name = "Member 2", Email = "member2@email.com"}
+		_membersList =
+		[
+			new Member() { Id = 1, Name = "Member 1", Email = "member1@email.com" },
+			new Member() { Id = 1, Name = "Member 2", Email = "member2@email.com" }
 		];
 		_mockLibraryService.Setup(ls => ls.GetBorrowed()).Returns(_booksList?.FindAll(b => b.IsBorrowed));
 		_mockLibraryService.Setup(ls => ls.GetAvailable()).Returns(_booksList?.FindAll(b => b.IsBorrowed == false));
-		
+
 		// Act
 		_testConsole.AddKeySequence([ConsoleKey.DownArrow, ConsoleKey.UpArrow, ConsoleKey.Backspace]);
 		int result = _borrowScreen.BorrowBookMenu();
-		
+
 		// Assert
 		Assert.Equal(0, result);
 	}
-	
+
 	[Fact]
 	public void BorrowOperation_ShouldReturnBook_IfEnterKeyIsPressed()
 	{
 		// Arrange
-		_booksList = [
-			new Book("Book 1", "Author 1") {Id = 1, Title = "Book 1", Author = "Author 1" ,IsBorrowed = true},
-			new Book("Book 2", "Author 1") {Id = 2, Title = "Book 2", Author = "Author 2" ,IsBorrowed = true},
+		_booksList =
+		[
+			new Book() { Id = 1, Title = "Book 1", Author = "Author 1", IsBorrowed = true },
+			new Book() { Id = 2, Title = "Book 2", Author = "Author 2", IsBorrowed = true },
 		];
-		_membersList = [
-			new Member() {Id = 1, Name = "Member 1", Email = "member1@email.com"},
-			new Member() {Id = 1, Name = "Member 2", Email = "member2@email.com"}
+		_membersList =
+		[
+			new Member() { Id = 1, Name = "Member 1", Email = "member1@email.com" },
+			new Member() { Id = 1, Name = "Member 2", Email = "member2@email.com" }
 		];
 		_mockLibraryService.Setup(ls => ls.GetBorrowed()).Returns(_booksList?.FindAll(b => b.IsBorrowed));
 		_mockLibraryService.Setup(ls => ls.GetAvailable()).Returns(_booksList?.FindAll(b => b.IsBorrowed == false));
@@ -147,31 +157,32 @@ public class BorrowScreenTest
 			})
 			.Returns(true);
 		_mockMemberService.Setup(ms => ms.Get()).Returns(_membersList);
-		
-		
+
+
 		// Act
 		_testConsole.AddKeySequence([ConsoleKey.DownArrow, ConsoleKey.UpArrow, ConsoleKey.Enter, ConsoleKey.Backspace]);
 		int result = _borrowScreen.BorrowBookMenu();
-		
+
 		// Assert
 		Assert.Equal(0, result);
 	}
-	
+
 	[Fact]
 	public void BorrowOperation_ShouldBorrowBook_IfAddKeyIsPressed()
 	{
 		// Arrange
-		_booksList = [
-			new Book("Book 1", "Author 1") {Id = 1, Title = "Book 1", Author = "Author 1" ,IsBorrowed = true},
-			new Book("Book 2", "Author 1") {Id = 2, Title = "Book 2", Author = "Author 2" ,IsBorrowed = true},
+		_booksList =
+		[
+			new Book() { Id = 1, Title = "Book 1", Author = "Author 1", IsBorrowed = true },
+			new Book() { Id = 2, Title = "Book 2", Author = "Author 2", IsBorrowed = true },
 		];
 		_mockLibraryService.Setup(ls => ls.GetBorrowed()).Returns(_booksList?.FindAll(b => b.IsBorrowed));
 		_mockLibraryService.Setup(ls => ls.GetAvailable()).Returns(() => null);
-		
+
 		// Act
 		_testConsole.AddKeySequence([ConsoleKey.Add, ConsoleKey.Backspace, ConsoleKey.Backspace]);
 		int result = _borrowScreen.BorrowBookMenu();
-		
+
 		// Assert
 		Assert.Equal(0, result);
 	}
@@ -180,74 +191,78 @@ public class BorrowScreenTest
 	public void BorrowBook_ShouldReturn_IfMembersIsNull()
 	{
 		// Arrange
-		_booksList = [
-			new Book("Book 1", "Author 1") {Id = 1, Title = "Book 1", Author = "Author 1" ,IsBorrowed = true},
-			new Book("Book 2", "Author 1") {Id = 2, Title = "Book 2", Author = "Author 2" ,IsBorrowed = true},
+		_booksList =
+		[
+			new Book() { Id = 1, Title = "Book 1", Author = "Author 1", IsBorrowed = true },
+			new Book() { Id = 2, Title = "Book 2", Author = "Author 2", IsBorrowed = true },
 		];
 		_mockLibraryService.Setup(ls => ls.GetBorrowed()).Returns(_booksList?.FindAll(b => b.IsBorrowed));
 		_mockLibraryService.Setup(ls => ls.GetAvailable()).Returns(_booksList?.FindAll(b => b.IsBorrowed == false));
 		_mockMemberService.Setup(ms => ms.Get()).Returns(() => null);
-		
+
 		// Act
 		_testConsole.AddKeySequence([ConsoleKey.Add, ConsoleKey.Backspace, ConsoleKey.Backspace]);
 		int result = _borrowScreen.BorrowBookMenu();
-		
+
 		// Assert
 		Assert.Equal(0, result);
 	}
-	
+
 	[Fact]
 	public void SelectAvailableBook_ShouldReturnNull_IdBackspaceIsPressed()
 	{
 		// Arrange
-		_booksList = [
-			new Book("Book 1", "Author 1") {Id = 1, Title = "Book 1", Author = "Author 1" ,IsBorrowed = true},
-			new Book("Book 2", "Author 1") {Id = 2, Title = "Book 2", Author = "Author 2" ,IsBorrowed = false},
+		_booksList =
+		[
+			new Book() { Id = 1, Title = "Book 1", Author = "Author 1", IsBorrowed = true },
+			new Book() { Id = 2, Title = "Book 2", Author = "Author 2", IsBorrowed = false },
 		];
-		_membersList = [
-			new Member() {Id = 1, Name = "Member 1", Email = "member1@email.com"},
-			new Member() {Id = 1, Name = "Member 2", Email = "member2@email.com"}
+		_membersList =
+		[
+			new Member() { Id = 1, Name = "Member 1", Email = "member1@email.com" },
+			new Member() { Id = 1, Name = "Member 2", Email = "member2@email.com" }
 		];
 		_mockLibraryService.Setup(ls => ls.GetBorrowed()).Returns(_booksList?.FindAll(b => b.IsBorrowed));
 		_mockLibraryService.Setup(ls => ls.GetAvailable()).Returns(_booksList?.FindAll(b => b.IsBorrowed == false));
 		_mockMemberService.Setup(ms => ms.Get()).Returns(_membersList);
-		
+
 		// Act
 		_testConsole.AddKeySequence([ConsoleKey.Add, ConsoleKey.Backspace, ConsoleKey.Backspace]);
 		int result = _borrowScreen.BorrowBookMenu();
-		
+
 		// Assert
 		Assert.Equal(0, result);
 	}
-	
+
 	[Fact]
 	public void SelectAvailableMember_ShouldReturnNull_IdBackspaceIsPressed()
 	{
 		// Arrange
-		_booksList = [
-			new Book("Book 1", "Author 1") {Id = 1, Title = "Book 1", Author = "Author 1" ,IsBorrowed = true},
-			new Book("Book 2", "Author 1") {Id = 2, Title = "Book 2", Author = "Author 2" ,IsBorrowed = false},
+		_booksList =
+		[
+			new Book() { Id = 1, Title = "Book 1", Author = "Author 1", IsBorrowed = true },
+			new Book() { Id = 2, Title = "Book 2", Author = "Author 2", IsBorrowed = false },
 		];
-		_membersList = [
-			new Member() {Id = 1, Name = "Member 1", Email = "member1@email.com"},
-			new Member() {Id = 1, Name = "Member 2", Email = "member2@email.com"}
+		_membersList =
+		[
+			new Member() { Id = 1, Name = "Member 1", Email = "member1@email.com" },
+			new Member() { Id = 1, Name = "Member 2", Email = "member2@email.com" }
 		];
 		_mockLibraryService.Setup(ls => ls.GetBorrowed()).Returns(_booksList?.FindAll(b => b.IsBorrowed));
 		_mockLibraryService.Setup(ls => ls.GetAvailable()).Returns(_booksList?.FindAll(b => b.IsBorrowed == false));
 		_mockMemberService.Setup(ms => ms.Get()).Returns(_membersList);
-		
+
 		// Act
 		_testConsole.AddKeySequence([ConsoleKey.Add, ConsoleKey.Enter, ConsoleKey.Backspace, ConsoleKey.Backspace]);
 		int result = _borrowScreen.BorrowBookMenu();
-		
+
 		// Assert
 		Assert.Equal(0, result);
 	}
-	
+
 	[Fact]
 	public void SearchInOutput_ShouldReturnFalse_WhenKeywordNotExist()
 	{
 		Assert.False(SearchInOutput("Ahmad Abdelkareem Nairat"));
 	}
-	
 }

@@ -45,6 +45,7 @@ public class BooksScreen(BookService bookService, IConsole console)
 
 		return 0;
 	}
+
 	private void DisplayBooks()
 	{
 		console.Clear();
@@ -67,6 +68,7 @@ public class BooksScreen(BookService bookService, IConsole console)
 		console.WriteLine("- Plus (+) Key -> Add a new record.");
 		console.WriteLine("- Backspace Key -> Get back to Main Menu." + Reset);
 	}
+
 	private bool BooksOperation()
 	{
 		var selected = 0;
@@ -99,11 +101,12 @@ public class BooksScreen(BookService bookService, IConsole console)
 						bookService.Update(_books[selected]);
 						_books = bookService.Get();
 					}
+
 					return false;
 				case ConsoleKey.Delete:
 					if (_books != null) // always true, just for warning.
 						bookService.Delete(_books[selected].Id);
-					
+
 					_books = bookService.Get();
 					return false;
 				case ConsoleKey.Add:
@@ -114,12 +117,13 @@ public class BooksScreen(BookService bookService, IConsole console)
 					return true;
 			}
 	}
+
 	private Book AddBook()
 	{
 		console.Clear();
-		Book book = new Book("NA", "NA")
+		Book book = new Book
 		{
-			Title = "NA", 
+			Title = "NA",
 			Author = "NA",
 			IsBorrowed = false,
 			BorrowedBy = null,
@@ -128,27 +132,30 @@ public class BooksScreen(BookService bookService, IConsole console)
 
 		console.Write(Yellow + "Book Title : " + Reset + ShowCursor);
 		string? input = console.ReadLine();
-		while(input?.Trim().Length == 0)
+		while (input?.Trim().Length == 0)
 		{
 			console.Write(Red + "Book Title Cannot be empty." + LineUp + ToLineStart);
 			console.Write(Yellow + "Book Title : " + Reset + ShowCursor);
 			input = console.ReadLine();
 		}
+
 		book.Title = input ?? "undefined";
-		
+
 		console.Write(Yellow + ClearLine + "Book Author : " + Reset + ShowCursor);
 		input = console.ReadLine();
-		while(input?.Trim().Length == 0)
+		while (input?.Trim().Length == 0)
 		{
 			console.Write(Red + "Book Author Cannot be empty." + LineUp + ToLineStart);
 			console.Write(Yellow + "Book Author : " + Reset + ShowCursor);
 			input = console.ReadLine();
 		}
+
 		book.Author = input ?? "undefined";
 		console.Write(HideCursor);
-		
+
 		return book;
 	}
+
 	private Book UpdateBook(Book book)
 	{
 		console.Clear();
@@ -163,6 +170,7 @@ public class BooksScreen(BookService bookService, IConsole console)
 		console.Write(LineUp + MoveRight(14) + book.Author + "\n");
 		return book;
 	}
+
 	private void PrintRow(Book? book, int row, string color)
 	{
 		console.Write(color);
@@ -171,7 +179,7 @@ public class BooksScreen(BookService bookService, IConsole console)
 		              CursorPosition(row, 40) +
 		              (book?.Author.Length > 25 ? book.Author.Substring(0, 22) + "..." : book?.Author) +
 		              CursorPosition(row, 68) +
-		              ((bool) book?.IsBorrowed ? $"{Red}Borrowed" : $"{Green}Available")
+		              ((bool)book?.IsBorrowed ? $"{Red}Borrowed" : $"{Green}Available")
 		              + CursorPosition(row, 79) + color +
 		              (book.BorrowedDate != null ? book.BorrowedDate.Value.ToShortDateString() : "***"));
 		console.Write(Reset);

@@ -156,7 +156,8 @@ public class MemberServiceTests
 			new() { Id = 1, Name = "John Doe" },
 			new() { Id = 2, Name = "Jane Smith" }
 		};
-		_mockMemberRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns<int>(id => members.FirstOrDefault(m => m.Id == id));
+		_mockMemberRepository.Setup(repo => repo.GetById(It.IsAny<int>()))
+			.Returns<int>(id => members.FirstOrDefault(m => m.Id == id));
 
 		// Act
 		var result = _memberService.GetById(2);
@@ -165,7 +166,7 @@ public class MemberServiceTests
 		Assert.Equal(2, result.Id);
 		Assert.Equal("Jane Smith", result.Name);
 	}
-	
+
 	[Fact]
 	public void GetById_ShouldReturnNull_WhenMemberNotExist()
 	{
@@ -174,7 +175,8 @@ public class MemberServiceTests
 			new() { Id = 1, Name = "John Doe" },
 			new() { Id = 2, Name = "Jane Smith" }
 		};
-		_mockMemberRepository.Setup(repo => repo.GetById(It.IsAny<int>())).Returns<int>(id => members.FirstOrDefault(m => m.Id == id));
+		_mockMemberRepository.Setup(repo => repo.GetById(It.IsAny<int>()))
+			.Returns<int>(id => members.FirstOrDefault(m => m.Id == id));
 
 		// Act
 		var result = _memberService.GetById(3);

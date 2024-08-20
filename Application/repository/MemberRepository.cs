@@ -1,10 +1,10 @@
+using Application.FileHandler;
 using Domain.Entities;
-using Domain.FileHandler;
 using Domain.Repository;
 
 namespace Application.Repository;
 
-public class MemberRepository(IMemberHandler memberHandler) : IMemberRepository
+public class MemberRepository(IFileHandler<Member> memberHandler) : IMemberRepository
 {
 	private List<Member>? _members;
 

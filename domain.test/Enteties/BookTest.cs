@@ -7,7 +7,7 @@ public class BookTests
 	[Fact]
 	public void CanSetAndGetProperties()
 	{
-		var book = new Book ("", "")
+		var book = new Book()
 		{
 			Id = 100,
 			Title = "Book Title",
@@ -30,8 +30,8 @@ public class BookTests
 	[Fact]
 	public void DefaultValues_ShouldBeAsExpected()
 	{
-		var book = new Book ("", "")
-		{ 
+		var book = new Book()
+		{
 			Title = "undefined",
 			Author = "undefined"
 		};

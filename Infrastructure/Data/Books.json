@@ -3,17 +3,17 @@
     "Id": 1,
     "Title": "Clean Code",
     "Author": "Robert C. Martin",
-    "IsBorrowed": false,
-    "BorrowedDate": null,
-    "BorrowedBy": null,
-    "MemberName": "unknown"
+    "IsBorrowed": true,
+    "BorrowedDate": "2024-08-19T19:18:57.4646069+03:00",
+    "BorrowedBy": 14,
+    "MemberName": "Ahmad Abdelraheem"
   },
   {
     "Id": 2,
     "Title": "Pragmatic Programmer",
     "Author": "Andrew Hunt and David Thomas",
     "IsBorrowed": true,
-    "BorrowedDate": "2024-08-19T18:57:46.5628425+03:00",
+    "BorrowedDate": "2024-08-19T19:19:05.2137513+03:00",
     "BorrowedBy": 2,
     "MemberName": "Fatima Al-Zahra"
   },
@@ -21,10 +21,10 @@
     "Id": 3,
     "Title": "Design Patterns",
     "Author": "Erich Gamma et al.",
-    "IsBorrowed": false,
-    "BorrowedDate": null,
-    "BorrowedBy": null,
-    "MemberName": "Ali Hassan"
+    "IsBorrowed": true,
+    "BorrowedDate": "2024-08-19T19:19:07.8682092+03:00",
+    "BorrowedBy": 3,
+    "MemberName": "Mohamed Ahmed"
   },
   {
     "Id": 4,
@@ -33,7 +33,7 @@
     "IsBorrowed": false,
     "BorrowedDate": null,
     "BorrowedBy": null,
-    "MemberName": "unknown"
+    "MemberName": "Noura Khalid"
   },
   {
     "Id": 5,
@@ -48,9 +48,9 @@
     "Id": 7,
     "Title": "You Don\u0027t Know JS",
     "Author": "Kyle Simpson",
-    "IsBorrowed": true,
-    "BorrowedDate": "2024-08-08T00:00:00",
-    "BorrowedBy": 5,
+    "IsBorrowed": false,
+    "BorrowedDate": null,
+    "BorrowedBy": null,
     "MemberName": "Youssef Ali"
   },
   {
@@ -66,9 +66,9 @@
     "Id": 9,
     "Title": "Effective Java",
     "Author": "Joshua Bloch",
-    "IsBorrowed": true,
-    "BorrowedDate": "2024-08-12T00:00:00",
-    "BorrowedBy": 4,
+    "IsBorrowed": false,
+    "BorrowedDate": null,
+    "BorrowedBy": null,
     "MemberName": "Sara Abdullah"
   },
   {
@@ -109,12 +109,12 @@
   },
   {
     "Id": 14,
-    "Title": "Art of Programming",
+    "Title": "Art Of Programming",
     "Author": "Donald E. Knuth",
-    "IsBorrowed": false,
-    "BorrowedDate": null,
-    "BorrowedBy": null,
-    "MemberName": "Fatima Al-Zahra"
+    "IsBorrowed": true,
+    "BorrowedDate": "2024-08-20T12:14:29.5000353+03:00",
+    "BorrowedBy": 9,
+    "MemberName": "Omar Saeed"
   },
   {
     "Id": 15,
