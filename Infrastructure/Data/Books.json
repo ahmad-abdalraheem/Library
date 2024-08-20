@@ -51,7 +51,7 @@
     "IsBorrowed": false,
     "BorrowedDate": null,
     "BorrowedBy": null,
-    "MemberName": "Youssef Ali"
+    "MemberName": "Ahmad Mo Jallad"
   },
   {
     "Id": 8,
@@ -111,10 +111,10 @@
     "Id": 14,
     "Title": "Art Of Programming",
     "Author": "Donald E. Knuth",
-    "IsBorrowed": true,
-    "BorrowedDate": "2024-08-20T12:14:29.5000353+03:00",
-    "BorrowedBy": 9,
-    "MemberName": "Omar Saeed"
+    "IsBorrowed": false,
+    "BorrowedDate": null,
+    "BorrowedBy": null,
+    "MemberName": "unknown"
   },
   {
     "Id": 15,

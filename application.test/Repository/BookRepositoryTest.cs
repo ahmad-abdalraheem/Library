@@ -1,7 +1,7 @@
 using Domain.Exceptions;
 using Application.Repository;
 using Domain.Entities;
-using Application.FileHandler;
+using Infrastructure.DataHandler;
 using Moq;
 
 namespace Application.Tests;
@@ -9,11 +9,11 @@ namespace Application.Tests;
 public class BookRepositoryTests
 {
 	private readonly BookRepository _bookRepository;
-	private readonly Mock<IFileHandler<Book>> _mockBookHandler;
+	private readonly Mock<IDataHandler<Book>> _mockBookHandler;
 
 	public BookRepositoryTests()
 	{
-		_mockBookHandler = new Mock<IFileHandler<Book>>();
+		_mockBookHandler = new Mock<IDataHandler<Book>>();
 		_bookRepository = new BookRepository(_mockBookHandler.Object);
 	}
 

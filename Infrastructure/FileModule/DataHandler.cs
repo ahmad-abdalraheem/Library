@@ -1,10 +1,9 @@
 using System.Text.Json;
-using Application.FileHandler;
 using Domain.Entities;
 
-namespace Infrastructure.FileModule;
+namespace Infrastructure.DataHandler;
 
-public class FileHandler<T>(string filePath) : IFileHandler<T>
+public class DataHandler<T>(string filePath) : IDataHandler<T>
 	where T : IEntity
 {
 	public bool Write(List<T> entities)
