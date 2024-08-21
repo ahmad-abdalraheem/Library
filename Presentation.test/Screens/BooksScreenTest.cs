@@ -15,7 +15,7 @@ public class BooksScreenTest
 
 	public BooksScreenTest()
 	{
-		_mockBookService = new Mock<BookService>(new BookRepository(new DataHandler<Book>("books.json")));
+		_mockBookService = new Mock<BookService>(new BookRepository(new DataFileHandler<Book>("books.json")));
 		_booksScreen = new BooksScreen(_mockBookService.Object, _testConsole);
 	}
 

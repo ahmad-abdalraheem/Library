@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Infrastructure.DataHandler;
 
-public class DataHandler<T>(string filePath) : IDataHandler<T>
+public class DataFileHandler<T>(string filePath) : IDataHandler<T>
 	where T : IEntity
 {
 	public bool Write(List<T> entities)

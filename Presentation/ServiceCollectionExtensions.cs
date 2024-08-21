@@ -17,12 +17,12 @@ public static class ServiceCollectionExtensions
 		services.AddSingleton<IMemberRepository, MemberRepository>();
 		services.AddSingleton<IBookRepository, BookRepository>();
 
-		services.AddSingleton<IDataHandler<Member>>(provider => new DataHandler<Member>(memberFilePath));
-		services.AddSingleton<IDataHandler<Book>>(provider => new DataHandler<Book>(bookFilePath));
+		services.AddSingleton<IDataHandler<Member>>(provider => new DataFileHandler<Member>(memberFilePath));
+		services.AddSingleton<IDataHandler<Book>>(provider => new DataFileHandler<Book>(bookFilePath));
 
-		services.AddTransient<MemberService>();
-		services.AddTransient<BookService>();
-		services.AddTransient<LibraryService>();
+		services.AddSingleton<MemberService>();
+		services.AddSingleton<BookService>();
+		services.AddSingleton<LibraryService>();
 
 		return services;
 	}
