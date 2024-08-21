@@ -1,28 +1,31 @@
 using Application.Repository;
 using Application.Service;
-using Infrastructure.DataHandler;
 using Domain.Entities;
 using Domain.Repository;
+using Infrastructure.DataHandler;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-
-namespace ConsoleApp;
 
 public static class ServiceCollectionExtensions
 {
 	public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 	{
-		var bookFilePath = "/home/ahmadabdalraheem/RiderProjects/Library/Infrastructure/Data/Books.json";
-		var memberFilePath = "/home/ahmadabdalraheem/RiderProjects/Library/Infrastructure/Data/Members.json";
+		// Register DbContext
+		services.AddDbContext<LibraryContext>(options =>
+			options.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=abdalraheem;Database=library;"));
 
-		services.AddSingleton<IMemberRepository, MemberRepository>();
-		services.AddSingleton<IBookRepository, BookRepository>();
+		// Register Repositories with Scoped Lifetime
+		services.AddScoped<IMemberRepository, MemberRepository>();
+		services.AddScoped<IBookRepository, BookRepository>();
 
-		services.AddSingleton<IDataHandler<Member>>(provider => new DataFileHandler<Member>(memberFilePath));
-		services.AddSingleton<IDataHandler<Book>>(provider => new DataFileHandler<Book>(bookFilePath));
+		// Register DataHandlers with Scoped Lifetime
+		services.AddScoped<IDataHandler<Member>, DataDatabaseHandler<Member>>();
+		services.AddScoped<IDataHandler<Book>, DataDatabaseHandler<Book>>();
 
-		services.AddSingleton<MemberService>();
-		services.AddSingleton<BookService>();
-		services.AddSingleton<LibraryService>();
+		// Register Services with Scoped Lifetime
+		services.AddScoped<MemberService>();
+		services.AddScoped<BookService>();
+		services.AddScoped<LibraryService>();
 
 		return services;
 	}

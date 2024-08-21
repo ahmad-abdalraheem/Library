@@ -1,12 +1,12 @@
 namespace Domain.Exceptions;
 
-public class FailWhileLoadingFileException : Exception
+public class FailWhileLoadingDataException : Exception
 {
-	public FailWhileLoadingFileException()
+	public FailWhileLoadingDataException()
 	{
 	}
 
-	public FailWhileLoadingFileException(string message) : base(message)
+	public FailWhileLoadingDataException(string message) : base(message)
 	{
 	}
 }

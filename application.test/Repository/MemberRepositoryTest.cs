@@ -113,7 +113,7 @@ public class MemberRepositoryTests
 	{
 		_mockMemberHandler.Setup(handler => handler.Read()).Returns((List<Member>)null);
 
-		Assert.Throws<FailWhileLoadingFileException>(() => _memberRepository.Add(new Member
+		Assert.Throws<FailWhileLoadingDataException>(() => _memberRepository.Add(new Member
 		{
 			Name = "undefined"
 		}));
@@ -124,7 +124,7 @@ public class MemberRepositoryTests
 	{
 		_mockMemberHandler.Setup(handler => handler.Read()).Returns((List<Member>)null);
 
-		Assert.Throws<FailWhileLoadingFileException>(() => _memberRepository.Update(new Member
+		Assert.Throws<FailWhileLoadingDataException>(() => _memberRepository.Update(new Member
 		{
 			Name = "undefined"
 		}));
@@ -135,6 +135,6 @@ public class MemberRepositoryTests
 	{
 		_mockMemberHandler.Setup(handler => handler.Read()).Returns((List<Member>)null);
 
-		Assert.Throws<FailWhileLoadingFileException>(() => _memberRepository.Delete(1));
+		Assert.Throws<FailWhileLoadingDataException>(() => _memberRepository.Delete(1));
 	}
 }
