@@ -31,6 +31,7 @@ public class LibraryService(BookService bookService,MemberService memberService)
 		book.IsBorrowed = false;
 		book.BorrowedBy = null;
 		book.BorrowedDate = null;
+		book.Borrower = null;
 		return bookService.Update(book);
 	}
 
@@ -42,8 +43,9 @@ public class LibraryService(BookService bookService,MemberService memberService)
 		if (memberService.GetById(member.Id) == null)
 			return false;
 		book.IsBorrowed = true;
+		book.Borrower = member; 
 		book.BorrowedBy = member.Id;
-		book.BorrowedDate = DateTime.Now;
+		book.BorrowedDate = DateOnly.FromDateTime(DateTime.Today); 
 		_books[_books.FindIndex(b => b.Id == book.Id)] = book;
 
 		return bookService.Update(book);

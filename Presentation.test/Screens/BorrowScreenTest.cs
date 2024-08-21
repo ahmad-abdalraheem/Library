@@ -87,7 +87,7 @@ public class BorrowScreenTest
 			{
 				int index = _booksList.FindIndex(b => b.Id == book.Id);
 				_booksList[index].IsBorrowed = true;
-				_booksList[index].BorrowedDate = DateTime.Now;
+				_booksList[index].BorrowedDate = DateOnly.MaxValue;
 				_booksList[index].BorrowedBy = member.Id;
 			})
 			.Returns(true);

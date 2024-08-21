@@ -113,7 +113,7 @@ public class BookRepositoryTests
 	{
 		_mockBookHandler.Setup(handler => handler.Read()).Returns((List<Book>)null);
 
-		Assert.Throws<FailWhileLoadingFileException>(() => _bookRepository.Add(new Book()
+		Assert.Throws<FailWhileLoadingDataException>(() => _bookRepository.Add(new Book()
 		{
 			Title = "undefined",
 			Author = "undefined"
@@ -125,7 +125,7 @@ public class BookRepositoryTests
 	{
 		_mockBookHandler.Setup(handler => handler.Read()).Returns((List<Book>)null);
 
-		Assert.Throws<FailWhileLoadingFileException>(() => _bookRepository.Update(new Book()
+		Assert.Throws<FailWhileLoadingDataException>(() => _bookRepository.Update(new Book()
 		{
 			Title = "undefined",
 			Author = "undefined"
@@ -137,6 +137,6 @@ public class BookRepositoryTests
 	{
 		_mockBookHandler.Setup(handler => handler.Read()).Returns((List<Book>)null);
 
-		Assert.Throws<FailWhileLoadingFileException>(() => _bookRepository.Delete(1));
+		Assert.Throws<FailWhileLoadingDataException>(() => _bookRepository.Delete(1));
 	}
 }

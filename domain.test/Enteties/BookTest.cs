@@ -13,7 +13,7 @@ public class BookTests
 			Title = "Book Title",
 			Author = "Book Author",
 			IsBorrowed = true,
-			BorrowedDate = DateTime.Now,
+			BorrowedDate = DateOnly.MaxValue,
 			BorrowedBy = 123,
 			MemberName = "John Doe"
 		};
