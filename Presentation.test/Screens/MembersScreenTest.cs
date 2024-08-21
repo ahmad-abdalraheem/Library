@@ -15,7 +15,7 @@ namespace ConsoleApp.Tests
 
 		public MembersScreenTests()
 		{
-			_mockMemberService = new Mock<MemberService>(new MemberRepository(new DataHandler<Member>("members.json")));
+			_mockMemberService = new Mock<MemberService>(new MemberRepository(new DataFileHandler<Member>("members.json")));
 			_membersScreen = new MembersScreen(_mockMemberService.Object, _testConsole);
 		}
 

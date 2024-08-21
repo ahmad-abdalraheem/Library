@@ -18,8 +18,8 @@ public class BorrowScreenTest
 
 	public BorrowScreenTest()
 	{
-		_mockBookService = new Mock<BookService>(new BookRepository(new DataHandler<Book>("books.json")));
-		_mockMemberService = new Mock<MemberService>(new MemberRepository(new DataHandler<Member>("members.json")));
+		_mockBookService = new Mock<BookService>(new BookRepository(new DataFileHandler<Book>("books.json")));
+		_mockMemberService = new Mock<MemberService>(new MemberRepository(new DataFileHandler<Member>("members.json")));
 		_mockLibraryService = new Mock<LibraryService>(_mockBookService.Object, _mockMemberService.Object);
 		_borrowScreen = new BorrowScreen(_mockLibraryService.Object, _mockMemberService.Object, _testConsole);
 	}

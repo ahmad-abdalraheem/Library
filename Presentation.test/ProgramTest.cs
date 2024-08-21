@@ -23,8 +23,8 @@ public class ProgramTests
 		string memberFilePath = "/home/ahmadabdalraheem/RiderProjects/Library/Infrastructure/Data/Members.json";
 		string bookFilePath = "/home/ahmadabdalraheem/RiderProjects/Library/Infrastructure/Data/Books.json";
 
-		_memberService = new MemberService(new MemberRepository(new DataHandler<Member>(memberFilePath)));
-		_bookService = new BookService(new BookRepository(new DataHandler<Book>(bookFilePath)));
+		_memberService = new MemberService(new MemberRepository(new DataFileHandler<Member>(memberFilePath)));
+		_bookService = new BookService(new BookRepository(new DataFileHandler<Book>(bookFilePath)));
 
 		_mockLibraryService = new Mock<LibraryService>(_bookService, _memberService);
 	}

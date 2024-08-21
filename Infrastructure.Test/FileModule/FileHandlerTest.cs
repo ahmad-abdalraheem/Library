@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Infrastructure.DataHandler.Tests
 {
-	public class DataHandlerTests
+	public class DataFileHandlerTests
 	{
 		private readonly string _testFilePath = "test.json";
 
@@ -45,7 +45,7 @@ namespace Infrastructure.DataHandler.Tests
 			// Arrange
 			var testData = CreateBookTestData();
 			File.Create(_testFilePath).Close();
-			var fileHandler = new DataHandler<Book>(_testFilePath);
+			var fileHandler = new DataFileHandler<Book>(_testFilePath);
 
 			// Act
 			var result = fileHandler.Write(testData);
@@ -67,7 +67,7 @@ namespace Infrastructure.DataHandler.Tests
 			// Arrange
 			var testData = CreateMemberTestData();
 			File.Create(_testFilePath).Close();
-			var fileHandler = new DataHandler<Member>(_testFilePath);
+			var fileHandler = new DataFileHandler<Member>(_testFilePath);
 
 			// Act
 			var result = fileHandler.Write(testData);
@@ -89,7 +89,7 @@ namespace Infrastructure.DataHandler.Tests
 		{
 			// Arrange
 			var testData = CreateBookTestData();
-			var fileHandler = new DataHandler<Book>("non_existent_file.json");
+			var fileHandler = new DataFileHandler<Book>("non_existent_file.json");
 
 			// Act
 			var result = fileHandler.Write(testData);
@@ -104,7 +104,7 @@ namespace Infrastructure.DataHandler.Tests
 			// Arrange
 			var testData = CreateBookTestData();
 			File.WriteAllText(_testFilePath, JsonSerializer.Serialize(testData));
-			var fileHandler = new DataHandler<Book>(_testFilePath);
+			var fileHandler = new DataFileHandler<Book>(_testFilePath);
 
 			// Act
 			var result = fileHandler.Read();
@@ -122,7 +122,7 @@ namespace Infrastructure.DataHandler.Tests
 		public void Read_FileDoesNotExist_ThrowsFileNotFoundException_ReturnsNull()
 		{
 			// Arrange
-			var fileHandler = new DataHandler<Book>("non_existent_file.json");
+			var fileHandler = new DataFileHandler<Book>("non_existent_file.json");
 
 			// Act
 			var result = fileHandler.Read();
@@ -136,7 +136,7 @@ namespace Infrastructure.DataHandler.Tests
 		{
 			// Arrange
 			var testData = CreateBookTestData();
-			var fileHandler = new DataHandler<Book>("invalid_path\0.json"); // Invalid path to trigger exception
+			var fileHandler = new DataFileHandler<Book>("invalid_path\0.json"); // Invalid path to trigger exception
 
 			// Act
 			var result = fileHandler.Write(testData);
@@ -149,7 +149,7 @@ namespace Infrastructure.DataHandler.Tests
 		public void Read_ExceptionCaught_ReturnsNull()
 		{
 			// Arrange
-			var fileHandler = new DataHandler<Book>("invalid_path\0.json"); // Invalid path to trigger exception
+			var fileHandler = new DataFileHandler<Book>("invalid_path\0.json"); // Invalid path to trigger exception
 
 			// Act
 			var result = fileHandler.Read();
