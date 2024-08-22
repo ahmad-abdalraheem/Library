@@ -15,7 +15,8 @@ public class BookTests
 			IsBorrowed = true,
 			BorrowedDate = DateOnly.MaxValue,
 			BorrowedBy = 123,
-			MemberName = "John Doe"
+			MemberName = "John Doe",
+			Borrower = new Member() {Name = "John Doe"}
 		};
 
 		Assert.Equal(100, book.Id);
@@ -25,12 +26,14 @@ public class BookTests
 		Assert.NotNull(book.BorrowedDate);
 		Assert.Equal(123, book.BorrowedBy);
 		Assert.Equal("John Doe", book.MemberName);
+		Assert.Equal("John Doe", book.Borrower.Name);
 	}
 
 	[Fact]
 	public void DefaultValues_ShouldBeAsExpected()
 	{
-		var book = new Book()
+		Member member = new Member() {Name = "Member 1"};
+		Book book = new Book()
 		{
 			Title = "undefined",
 			Author = "undefined"
