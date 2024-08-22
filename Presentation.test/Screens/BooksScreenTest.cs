@@ -1,6 +1,7 @@
 using Application.Repository;
 using Application.Service;
 using Domain.Entities;
+using Domain.Repository;
 using Infrastructure.DataHandler;
 using Moq;
 
@@ -15,7 +16,7 @@ public class BooksScreenTest
 
 	public BooksScreenTest()
 	{
-		_mockBookService = new Mock<BookService>(new BookRepository(new DataFileHandler<Book>("books.json")));
+		_mockBookService = new Mock<BookService>(new Mock<IBookRepository>().Object);
 		_booksScreen = new BooksScreen(_mockBookService.Object, _testConsole);
 	}
 

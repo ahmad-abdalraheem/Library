@@ -14,10 +14,7 @@ public static class Program
 		}
 		catch (Exception)
 		{
-			console = new TestConsole();
-			console.AddKeySequence([
-				ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.DownArrow, ConsoleKey.Enter
-			]);
+			return 0;
 		}
 
 		IHost host = CreateHost();
