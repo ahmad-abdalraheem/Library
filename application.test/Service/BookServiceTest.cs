@@ -187,4 +187,27 @@ public class BookServiceTests
 
 		Assert.Null(result);
 	}
+
+	[Fact]
+	public void GetById_ShouldReturnBook_WhenBookIsExists()
+	{
+		Book book = new Book() {Id = 1, Title = "Book 1", Author = "Author 1"};
+		_mockBookRepository.Setup(repo => repo.GetById(1)).Returns(book);
+		
+		var result = _bookService.GetById(book.Id);
+		
+		Assert.NotNull(result);
+		Assert.Equal(book, result);
+	}
+	
+	[Fact]
+	public void GetById_ShouldReturnNull_WhenErrorIsThrown()
+	{
+		Book book = new Book() {Id = 1, Title = "Book 1", Author = "Author 1"};
+		_mockBookRepository.Setup(repo => repo.GetById(1)).Throws(new Exception("Database error"));
+		
+		var result = _bookService.GetById(book.Id);
+		
+		Assert.Null(result);
+	}
 }

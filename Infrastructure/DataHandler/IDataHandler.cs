@@ -2,8 +2,12 @@ using Domain.Entities;
 
 namespace Infrastructure.DataHandler;
 
-public interface IDataHandler<T> where T : IEntity
+public interface IDataHandler <TEntity> where TEntity : IEntity
 {
-	bool Write(List<T> entities);
-	List<T>? Read();
+	bool Add(TEntity entity);
+	bool Update(TEntity entity);
+	bool Delete(int entityId);
+	List<TEntity>? Get();
+	TEntity? GetById(int id);
+	
 }

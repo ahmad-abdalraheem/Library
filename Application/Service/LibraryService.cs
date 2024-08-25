@@ -2,19 +2,19 @@ using Domain.Entities;
 
 namespace Application.Service;
 
-public class LibraryService(BookService bookService,MemberService memberService)
+public class LibraryService(BookService bookService, MemberService memberService)
 {
 	private List<Book>? _books = bookService.Get();
 	private List<Member>? _members = memberService.Get();
 
 	public virtual List<Book>? GetBorrowed()
 	{
-			var borrowedBooks = (_books ?? bookService.Get())?.FindAll(b => b.IsBorrowed);
-			_members ??= memberService.Get();
-			if (borrowedBooks != null)
-				foreach (var book in borrowedBooks)
-					book.MemberName = _members?.Find(m => m.Id == book.BorrowedBy)?.Name ?? "unknown";
-			return borrowedBooks;
+		var borrowedBooks = (_books ?? bookService.Get())?.FindAll(b => b.IsBorrowed);
+		_members ??= memberService.Get();
+		if (borrowedBooks != null)
+			foreach (var book in borrowedBooks)
+				book.MemberName = _members?.Find(m => m.Id == book.BorrowedBy)?.Name ?? "unknown";
+		return borrowedBooks;
 	}
 
 	public virtual List<Book>? GetAvailable()
@@ -35,17 +35,20 @@ public class LibraryService(BookService bookService,MemberService memberService)
 		return bookService.Update(book);
 	}
 
-	public virtual bool BorrowBook(Book book, Member member)
+	public virtual bool BorrowBook(int bookId, int memberId)
 	{
 		_books ??= bookService.Get();
-		if (_books == null || _books.Count == 0) 
+		if (_books == null || _books.Count == 0)
 			return false;
-		if (memberService.GetById(member.Id) == null)
+		if (memberService.GetById(memberId) == null)
+			return false;
+		Book? book = _books.Find(b => b.Id == bookId);
+		if (book == null)
 			return false;
 		book.IsBorrowed = true;
-		book.Borrower = member; 
-		book.BorrowedBy = member.Id;
-		book.BorrowedDate = DateOnly.FromDateTime(DateTime.Today); 
+		book.Borrower = _members?.Find(m => m.Id == memberId);
+		book.BorrowedBy = memberId;
+		book.BorrowedDate = DateOnly.FromDateTime(DateTime.Today);
 		_books[_books.FindIndex(b => b.Id == book.Id)] = book;
 
 		return bookService.Update(book);

@@ -107,7 +107,7 @@ public class BorrowScreen(LibraryService libraryService, MemberService memberSer
 		Member? member = SelectMember();
 		if (member == null)
 			return;
-		libraryService.BorrowBook(book, member);
+//		libraryService.BorrowBook(book, member);
 		AvailableBooks.Remove(book);
 		BorrowedBooks?.Add(book);
 	}
