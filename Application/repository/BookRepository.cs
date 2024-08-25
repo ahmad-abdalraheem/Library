@@ -19,7 +19,7 @@ public class BookRepository(IDataHandler<Book> bookHandler) : IBookRepository
 			_books.Add(book);
 		}
 
-		return _books != null && bookHandler.Write(_books);
+		return _books != null && bookHandler.Add(book);
 	}
 
 	public bool Update(Book book)
@@ -32,7 +32,7 @@ public class BookRepository(IDataHandler<Book> bookHandler) : IBookRepository
 			_books[index] = book;
 		}
 
-		return _books != null && bookHandler.Write(_books);
+		return _books != null && bookHandler.Update(book);
 	}
 
 	public bool Delete(int bookId)
@@ -40,10 +40,10 @@ public class BookRepository(IDataHandler<Book> bookHandler) : IBookRepository
 		if ((_books ?? Get()) == null)
 			throw new FailWhileLoadingDataException("An Error Occurs While Retrieving Books Data");
 		_books?.Remove(_books.Find(b => b.Id == bookId)!);
-		return _books != null && bookHandler.Write(_books);
+		return _books != null && bookHandler.Delete(bookId);
 	}
 
-	public List<Book>? Get() =>_books ??= bookHandler.Read();
+	public List<Book>? Get() =>_books ??= bookHandler.Get();
 
-	public Book? GetById(int bookId) => (_books ?? Get())?.Find(m => m.Id == bookId);
+	public Book? GetById(int bookId) => bookHandler.GetById(bookId);
 }

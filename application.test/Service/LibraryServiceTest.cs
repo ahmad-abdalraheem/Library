@@ -48,9 +48,19 @@ public class LibraryServiceTests
 		Member member = new Member { Id = 2, Name = "undefined" };
 		_memberList.Add(member);
 
-		bool result = _libraryService.BorrowBook(book, member);
+		bool result = _libraryService.BorrowBook(book.Id, member.Id);
 
 		Assert.True(result);
+	}
+
+	[Fact]
+	public void BorrowBook_ShouldReturnFalse_WhenBookIsNullOrEmpty()
+	{
+		_bookList = null;
+		
+		var result = _libraryService.BorrowBook(1, 1);
+		
+		Assert.False(result);
 	}
 
 	[Fact]
@@ -62,26 +72,22 @@ public class LibraryServiceTests
 		Member member = new Member { Id = 2, Name = "undefined" };
 		_memberList.Clear();
 
-		bool result = _libraryService.BorrowBook(book, member);
+		bool result = _libraryService.BorrowBook(book.Id, member.Id);
 
 		Assert.False(result);
 	}
 
 	[Fact]
-	public void BorrowBook_ShouldReturnFalse_WhenBookIsNull()
+	public void BorrowBook_ShouldReturnFalse_WhenBookIsNotExists()
 	{
-		var member = new Member
-		{
-			Id = 2,
-			Name = "undefined"
-		};
-
-		var result = _libraryService.BorrowBook(null, member);
-
+		_bookService.Add(new Book() { Id = 1, Author = "John Doe", Title = "Book 1" });
+		_memberList.Add(new Member() { Id = 1, Name = "undefined" });
+		
+		var result = _libraryService.BorrowBook(2, 1);
+		
 		Assert.False(result);
 	}
-
-
+	
 	[Fact]
 	public void BorrowBook_ShouldReturnFalse_WhenUpdateFails()
 	{
@@ -101,7 +107,7 @@ public class LibraryServiceTests
 		_bookList.Add(book);
 
 		_bookService.Update(book);
-		var result = _libraryService.BorrowBook(book, member);
+		var result = _libraryService.BorrowBook(book.Id, member.Id);
 
 		// Assert
 		Assert.False(result);

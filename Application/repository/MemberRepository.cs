@@ -19,7 +19,7 @@ public class MemberRepository(IDataHandler<Member> memberHandler) : IMemberRepos
 			member.Email = member.Email?.Trim().Length == 0 ? "Undefined" : member.Email?.Trim();
 			_members.Add(member);
 		}
-		return _members != null && memberHandler.Write(_members);
+		return _members != null && memberHandler.Add(member);
 	}
 
 	public bool Update(Member member)
@@ -33,7 +33,7 @@ public class MemberRepository(IDataHandler<Member> memberHandler) : IMemberRepos
 			_members[index] = member;
 		}
 
-		return _members != null && memberHandler.Write(_members);
+		return _members != null && memberHandler.Update(member);
 	}
 
 	public bool Delete(int memberId)
@@ -42,10 +42,10 @@ public class MemberRepository(IDataHandler<Member> memberHandler) : IMemberRepos
 			throw new FailWhileLoadingDataException();
 		
 		_members?.Remove(_members.Find(m => m.Id == memberId)!);
-		return _members != null && memberHandler.Write(_members);
+		return _members != null && memberHandler.Delete(memberId);
 	}
 
-	public List<Member>? Get() => _members ??= memberHandler.Read();
+	public List<Member>? Get() => _members ??= memberHandler.Get();
 
-	public Member? GetById(int memberId) => (_members ?? Get())?.Find(m => m.Id == memberId);
+	public Member? GetById(int memberId) => memberHandler.GetById(memberId);
 }

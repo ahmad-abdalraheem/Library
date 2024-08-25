@@ -25,15 +25,15 @@ public class MemberRepositoryTests
 			new() { Id = 1, Name = "Existing Member", Email = "existing@example.com" }
 		};
 		var newMember = new Member { Name = "New Member", Email = "new@example.com" };
-		_mockMemberHandler.Setup(handler => handler.Read()).Returns(initialMembers);
-		_mockMemberHandler.Setup(handler => handler.Write(It.IsAny<List<Member>>())).Returns(true);
+		_mockMemberHandler.Setup(handler => handler.Get()).Returns(initialMembers);
+		_mockMemberHandler.Setup(handler => handler.Add(It.IsAny<Member>())).Returns(true);
 
 		var result = _memberRepository.Add(newMember);
 
 		Assert.True(result);
 		Assert.Equal(2, initialMembers.Count);
 		Assert.Equal("New Member", initialMembers[1].Name);
-		_mockMemberHandler.Verify(handler => handler.Write(It.IsAny<List<Member>>()), Times.Once);
+		_mockMemberHandler.Verify(handler => handler.Add(It.IsAny<Member>()), Times.Once);
 	}
 
 	[Fact]
@@ -44,14 +44,14 @@ public class MemberRepositoryTests
 			new() { Id = 1, Name = "Old Name", Email = "old@example.com" }
 		};
 		var updatedMember = new Member { Id = 1, Name = "Updated Name", Email = "updated@example.com" };
-		_mockMemberHandler.Setup(handler => handler.Read()).Returns(initialMembers);
-		_mockMemberHandler.Setup(handler => handler.Write(It.IsAny<List<Member>>())).Returns(true);
+		_mockMemberHandler.Setup(handler => handler.Get()).Returns(initialMembers);
+		_mockMemberHandler.Setup(handler => handler.Update(It.IsAny<Member>())).Returns(true);
 
 		var result = _memberRepository.Update(updatedMember);
 
 		Assert.True(result);
 		Assert.Equal("Updated Name", initialMembers[0].Name);
-		_mockMemberHandler.Verify(handler => handler.Write(It.IsAny<List<Member>>()), Times.Once);
+		_mockMemberHandler.Verify(handler => handler.Update(It.IsAny<Member>()), Times.Once);
 	}
 
 	[Fact]
@@ -62,15 +62,15 @@ public class MemberRepositoryTests
 			new() { Id = 1, Name = "Member to Remove", Email = "remove@example.com" },
 			new() { Id = 2, Name = "Another Member", Email = "another@example.com" }
 		};
-		_mockMemberHandler.Setup(handler => handler.Read()).Returns(initialMembers);
-		_mockMemberHandler.Setup(handler => handler.Write(It.IsAny<List<Member>>())).Returns(true);
+		_mockMemberHandler.Setup(handler => handler.Get()).Returns(initialMembers);
+		_mockMemberHandler.Setup(handler => handler.Delete(It.IsAny<int>())).Returns(true);
 
 		var result = _memberRepository.Delete(1);
 
 		Assert.True(result);
 		Assert.Single(initialMembers);
 		Assert.Equal(2, initialMembers[0].Id);
-		_mockMemberHandler.Verify(handler => handler.Write(It.IsAny<List<Member>>()), Times.Once);
+		_mockMemberHandler.Verify(handler => handler.Delete(It.IsAny<int>()), Times.Once);
 	}
 
 	[Fact]
@@ -81,7 +81,7 @@ public class MemberRepositoryTests
 			new() { Id = 1, Name = "Member 1", Email = "member1@example.com" },
 			new() { Id = 2, Name = "Member 2", Email = "member2@example.com" }
 		};
-		_mockMemberHandler.Setup(handler => handler.Read()).Returns(members);
+		_mockMemberHandler.Setup(handler => handler.Get()).Returns(members);
 
 		var result = _memberRepository.Get();
 
@@ -99,10 +99,10 @@ public class MemberRepositoryTests
 			new() { Id = 1, Name = "Member 1", Email = "member1@example.com" },
 			new() { Id = 2, Name = "Member 2", Email = "member2@example.com" }
 		};
-		_mockMemberHandler.Setup(handler => handler.Read()).Returns(members);
-
+		_mockMemberHandler.Setup(handler => handler.GetById(2)).Returns(members[1]);
+	
 		var result = _memberRepository.GetById(2);
-
+	
 		Assert.NotNull(result);
 		Assert.Equal(2, result.Id);
 		Assert.Equal("Member 2", result.Name);
@@ -111,7 +111,7 @@ public class MemberRepositoryTests
 	[Fact]
 	public void Add_ShouldThrowFileLoadExceptionWhenMembersAreNull()
 	{
-		_mockMemberHandler.Setup(handler => handler.Read()).Returns((List<Member>)null);
+		_mockMemberHandler.Setup(handler => handler.Get()).Returns((List<Member>)null);
 
 		Assert.Throws<FailWhileLoadingDataException>(() => _memberRepository.Add(new Member
 		{
@@ -122,7 +122,7 @@ public class MemberRepositoryTests
 	[Fact]
 	public void Update_ShouldThrowFileLoadExceptionWhenMembersAreNull()
 	{
-		_mockMemberHandler.Setup(handler => handler.Read()).Returns((List<Member>)null);
+		_mockMemberHandler.Setup(handler => handler.Get()).Returns((List<Member>)null);
 
 		Assert.Throws<FailWhileLoadingDataException>(() => _memberRepository.Update(new Member
 		{
@@ -133,7 +133,7 @@ public class MemberRepositoryTests
 	[Fact]
 	public void Delete_ShouldThrowFileLoadExceptionWhenMembersAreNull()
 	{
-		_mockMemberHandler.Setup(handler => handler.Read()).Returns((List<Member>)null);
+		_mockMemberHandler.Setup(handler => handler.Get()).Returns((List<Member>)null);
 
 		Assert.Throws<FailWhileLoadingDataException>(() => _memberRepository.Delete(1));
 	}

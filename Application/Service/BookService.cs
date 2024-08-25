@@ -46,12 +46,24 @@ public class BookService(IBookRepository bookRepository)
 			return false;
 		}
 	}
-
 	public virtual List<Book>? Get()
 	{
 		try
 		{
 			return _bookRepository.Get();
+		}
+		catch (Exception e)
+		{
+			WriteLine(e.Message);
+			return null;
+		}
+	}
+	
+	public virtual Book? GetById(int bookId)
+	{
+		try
+		{
+			return _bookRepository.GetById(bookId);
 		}
 		catch (Exception e)
 		{
