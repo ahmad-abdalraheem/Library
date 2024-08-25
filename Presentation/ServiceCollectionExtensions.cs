@@ -10,23 +10,30 @@ public static class ServiceCollectionExtensions
 {
 	public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 	{
-		// Register DbContext
 		services.AddDbContext<LibraryContext>(options =>
 			options.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=abdalraheem;Database=library;"));
 
-		// Register Repositories with Scoped Lifetime
+		// Register Repositories
 		services.AddScoped<IMemberRepository, MemberRepository>();
 		services.AddScoped<IBookRepository, BookRepository>();
 
-		// Register DataHandlers with Scoped Lifetime
-		services.AddScoped<IDataHandler<Member>, MemberDBHandler<Member>>();
-		services.AddScoped<IDataHandler<Book>, MemberDBHandler<Book>>();
+		// Register DataHandlers
+		services.AddScoped<IDataHandler<Member>, MemberDbHandler<Member>>();
+		services.AddScoped<IDataHandler<Book>, BookDbHandler<Book>>();
 
-		// Register Services with Scoped Lifetime
+		// Register Services
 		services.AddScoped<MemberService>();
 		services.AddScoped<BookService>();
 		services.AddScoped<LibraryService>();
 
 		return services;
 	}
+	
+	public static IHost CreateHost()
+	{
+		return Host.CreateDefaultBuilder()
+			.ConfigureServices(services => services.AddApplicationServices())
+			.Build();
+	}
 }
+

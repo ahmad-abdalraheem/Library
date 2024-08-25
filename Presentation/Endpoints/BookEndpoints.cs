@@ -1,7 +1,7 @@
 using Application.Service;
 using Domain.Entities;
 
-namespace API.Endpoints;
+namespace Presentation.Endpoints;
 
 public static class BooksEndpoints
 {
@@ -29,7 +29,7 @@ public static class BooksEndpoints
 
 		});
 
-		books.MapPost("/add", (BookService bookService, Book book) =>
+		books.MapPost("/", (BookService bookService, Book book) =>
 		{
 			bool result = bookService.Add(book);
 			if(!result)
@@ -38,7 +38,7 @@ public static class BooksEndpoints
 			return Results.Created();
 		});
 
-		books.MapPost("update", (BookService bookService, Book book) =>
+		books.MapPut("/{id}", (BookService bookService, int id, Book book) =>
 		{
 			bool result = bookService.Update(book);
 			if(!result)
@@ -47,9 +47,9 @@ public static class BooksEndpoints
 			return Results.Ok();
 		});
 
-		books.MapDelete("/delete", (BookService bookService, int bookId) =>
+		books.MapDelete("/{id}", (BookService bookService, int id) =>
 		{
-			bool result = bookService.Delete(bookId);
+			bool result = bookService.Delete(id);
 			if(!result)
 				return Results.StatusCode(500);
 			

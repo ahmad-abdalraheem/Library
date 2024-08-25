@@ -1,70 +1,20 @@
+using Presentation.Endpoints;
 using Application.Service;
-using ConsoleApp;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-public static class Program
-{
-	public static int Main()
-	{
-		IConsole console = new UserConsole();
-		try
-		{
-			console.ReadKey();
-		}
-		catch (Exception)
-		{
-			return 0;
-		}
+var builder = WebApplication.CreateBuilder(args);
+builder.RegisterServices();
 
-		IHost host = CreateHost();
-		return RunApplication(host, console);
-	}
+var app = builder.Build();
 
-	public static IHost CreateHost()
-	{
-		return Host.CreateDefaultBuilder()
-			.ConfigureServices(services => services.AddApplicationServices())
-			.Build();
-	}
+app.RegisterMiddlewares();
 
-	public static int RunApplication(IHost host, IConsole console)
-	{
-		var memberService = host.Services.GetRequiredService<MemberService>();
-		var bookService = host.Services.GetRequiredService<BookService>();
-		var libraryService = new LibraryService(bookService, memberService);
+app.RegisterMemberEndpoints();
+app.RegisterBookEndpoints();
+app.RegisterLibraryEndpoints();
 
-		return RunMenu(memberService, bookService, libraryService, console);
-	}
+app.MapGet("/", () => "Welcome to the OP Library API!");
 
-	public static int RunMenu(MemberService memberService, BookService bookService,
-		LibraryService libraryService, IConsole console)
-	{
-		MembersScreen? membersScreen = null;
-		BooksScreen? booksScreen = null;
-		BorrowScreen? borrowScreen = null;
-
-		console.WriteLine(Ansi.HideCursor);
-		List<string> options = ["Members", "Books", "Return/Borrow book", "Exit"];
-
-		while (true)
-		{
-			console.Clear();
-			var selection = UserInteraction.GetUserSelection(options, console: console);
-			switch (selection)
-			{
-				case 0:
-					(membersScreen ??= new MembersScreen(memberService, console)).MembersMenu();
-					break;
-				case 1:
-					(booksScreen ??= new BooksScreen(bookService, console)).BooksMenu();
-					break;
-				case 2:
-					(borrowScreen ??= new BorrowScreen(libraryService, memberService, console)).BorrowBookMenu();
-					break;
-				default:
-					return 0;
-			}
-		}
-	}
-}
+app.Run();

@@ -1,7 +1,7 @@
 using Application.Service;
 using Domain.Entities;
 
-namespace API.Endpoints;
+namespace Presentation.Endpoints;
 
 public static class LibraryEndpoints
 {
@@ -9,7 +9,7 @@ public static class LibraryEndpoints
 	{
 		var library = routes.MapGroup("/api/v1/library");
 		
-		library.MapGet("/getBorrowed", (LibraryService libraryService) =>
+		library.MapGet("/borrowed", (LibraryService libraryService) =>
 		{
 			List<Book>? books = libraryService.GetBorrowed();
 			if(books is null)
@@ -18,7 +18,7 @@ public static class LibraryEndpoints
 			return Results.Ok(books);
 		});
 		
-		library.MapGet("/getAvailable", (LibraryService libraryService) =>
+		library.MapGet("/available", (LibraryService libraryService) =>
 		{
 			List<Book>? books = libraryService.GetAvailable();
 			if(books is null)

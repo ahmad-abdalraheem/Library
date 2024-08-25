@@ -1,7 +1,7 @@
 using Application.Service;
 using Domain.Entities;
 
-namespace API.Endpoints;
+namespace Presentation.Endpoints;
 
 public static class MemberEndpoints
 {
@@ -9,7 +9,7 @@ public static class MemberEndpoints
 	{
 		var members = routes.MapGroup("/api/v1/members");
 
-		members.MapGet("", (MemberService memberService) =>
+		members.MapGet("/", (MemberService memberService) =>
 		{
 			List<Member>? membersList = memberService.Get();
 			if(membersList is null)
@@ -29,7 +29,7 @@ public static class MemberEndpoints
 
 		});
 
-		members.MapPost("/add", (MemberService memberService, Member member) =>
+		members.MapPost("/", (MemberService memberService, Member member) =>
 		{
 			bool result = memberService.Add(member);
 			if(!result)
@@ -38,7 +38,7 @@ public static class MemberEndpoints
 			return Results.Created();
 		});
 
-		members.MapPost("update", (MemberService memberService, Member member) =>
+		members.MapPut("/{id}", (MemberService memberService, int id, Member member) =>
 		{
 			bool result = memberService.Update(member);
 			if(!result)
@@ -47,9 +47,9 @@ public static class MemberEndpoints
 			return Results.Ok();
 		});
 
-		members.MapDelete("/delete", (MemberService memberService, int memberId) =>
+		members.MapDelete("/{id}", (MemberService memberService, int id) =>
 		{
-			bool result = memberService.Delete(memberId);
+			bool result = memberService.Delete(id);
 			if(!result)
 				return Results.StatusCode(500);
 			
