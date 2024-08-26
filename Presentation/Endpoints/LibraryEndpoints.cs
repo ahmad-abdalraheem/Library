@@ -8,40 +8,79 @@ public static class LibraryEndpoints
 	public static void RegisterLibraryEndpoints(this IEndpointRouteBuilder routes)
 	{
 		var library = routes.MapGroup("/api/v1/library");
-		
+
 		library.MapGet("/borrowed", (LibraryService libraryService) =>
 		{
-			List<Book>? books = libraryService.GetBorrowed();
-			if(books is null)
-				return Results.NotFound();
-			
-			return Results.Ok(books);
+			try
+			{
+				List<Book>? books = libraryService.GetBorrowed();
+
+				return Results.Ok(books);
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine("\x1b[41mError \x1b[0m Library > Borrowed : " + e.Message);
+				return Results.Problem(detail: e.Message, statusCode: 500);
+			}
 		});
-		
+
 		library.MapGet("/available", (LibraryService libraryService) =>
 		{
-			List<Book>? books = libraryService.GetAvailable();
-			if(books is null)
-				return Results.NotFound();
-			
-			return Results.Ok(books);
-		});
-		
-		library.MapPost("/return", (LibraryService LibraryService, int bookId) =>
-		{
-			if (LibraryService.ReturnBook(bookId))
-				return Results.Ok();
+			try
+			{
+				List<Book>? books = libraryService.GetAvailable();
 
-			return Results.StatusCode(500);
+				return Results.Ok(books);
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine("\x1b[41mError \x1b[0m Library > Available : " + e.Message);
+				return Results.Problem(detail: e.Message, statusCode: 500);
+			}
 		});
-		
+
+		library.MapPost("/return", (LibraryService libraryService, int bookId) =>
+		{
+			try
+			{
+				if (bookId <= 0)
+					throw new IndexOutOfRangeException("Book Id cannot be negative or zero.");
+
+				Book book = libraryService.ReturnBook(bookId);
+				return Results.Ok(book);
+			}
+			catch (Exception e) when (e is KeyNotFoundException or IndexOutOfRangeException)
+			{
+				return Results.NotFound(e.Message);
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine("\x1b[41mError \x1b[0m Books > Return : " + e.Message);
+				return Results.Problem(detail: e.Message, statusCode: 500);
+			}
+		});
+
 		library.MapPost("/borrow", (LibraryService libraryService, int bookId, int memberId) =>
 		{
-			if (libraryService.BorrowBook(bookId, memberId))
-				return Results.Ok();
-			
-			return Results.StatusCode(500);
+			try
+			{
+				if (bookId <= 0)
+					throw new IndexOutOfRangeException("Book Id cannot be negative or zero.");
+				if (memberId <= 0)
+					throw new IndexOutOfRangeException("Member Id cannot be negative or zero.");
+
+				libraryService.BorrowBook(bookId, memberId);
+				return Results.Ok(book);
+			}
+			catch (Exception e) when (e is KeyNotFoundException or IndexOutOfRangeException)
+			{
+				return Results.NotFound(e.Message);
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine("\x1b[41mError \x1b[0m Books > Borrow : " + e.Message);
+				return Results.Problem(detail: e.Message, statusCode: 500);
+			}
 		});
-		
 	}
 }

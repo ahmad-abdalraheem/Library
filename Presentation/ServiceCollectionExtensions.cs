@@ -17,10 +17,6 @@ public static class ServiceCollectionExtensions
 		services.AddScoped<IMemberRepository, MemberRepository>();
 		services.AddScoped<IBookRepository, BookRepository>();
 
-		// Register DataHandlers
-		services.AddScoped<IDataHandler<Member>, MemberDbHandler<Member>>();
-		services.AddScoped<IDataHandler<Book>, BookDbHandler<Book>>();
-
 		// Register Services
 		services.AddScoped<MemberService>();
 		services.AddScoped<BookService>();

@@ -1,8 +1,8 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
-using Domain.Entities;
 
 public class LibraryContextTests
 {
@@ -14,26 +14,32 @@ public class LibraryContextTests
     }
 
     [Fact]
-    public async Task SaveChanges_ShouldUpdateIsBorrowedStatus_WhenBookIsModified()
+    public async Task UpdateIsBorrowedStatus_ShouldUpdateIsBorrowedStatus_WhenBookIsModified()
     {
         // Arrange
         var databaseName = "SaveChanges_ShouldUpdateIsBorrowedStatus_WhenBookIsModified";
         var options = GetInMemoryDatabaseOptions(databaseName);
         using (var context = new LibraryContext(options))
         {
+            Member borrower = new Member()
+            {
+                Id = 1,
+                Name = "Borrower",
+                Email = null
+            };
             var book = new Book
             {
                 Title = "Test Book",
                 Author = "Test Author",
-                IsBorrowed = true
+                IsBorrowed = true,
+                Borrower = borrower
             };
             context.Books.Add(book);
-            await context.SaveChangesAsync();
-
+            context.SaveChanges();
+            
             // Act
-            book.BorrowedBy = null;
-            context.Books.Update(book);
-            await context.SaveChangesAsync();
+            context.UpdateIsBorrowedStatus(borrower);
+            context.SaveChanges();
         }
 
         // Assert

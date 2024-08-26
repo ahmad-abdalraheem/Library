@@ -11,49 +11,93 @@ public static class BooksEndpoints
 
 		books.MapGet("", (BookService bookService) =>
 		{
-			List<Book>? booksList = bookService.Get();
-			if(booksList is null)
-				return Results.NotFound();
-			
-			return Results.Ok(booksList);
-
+			try
+			{
+				List<Book>? booksList = bookService.Get();
+				return Results.Ok(booksList);
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine("\x1b[41mError \x1b[0m Books > Get : " + e.Message);
+				return Results.Problem(detail: e.Message, statusCode: 500);
+			}
 		});
 
 		books.MapGet("/{id}", (BookService booksService, int id) =>
 		{
-			Book? book = booksService.GetById(id);
-			if(book is null)
-				return Results.NotFound();
-
-			return Results.Ok(book);
+			try
+			{
+				Book? book = booksService.GetById(id);
+				if (book == null)
+					throw new KeyNotFoundException("No book with Id : " + id);
+				
+				return Results.Ok(book);
+			}
+			catch (Exception e) when (e is IndexOutOfRangeException or KeyNotFoundException)
+			{
+				return Results.NotFound(e.Message);
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine("\x1b[41mError \x1b[0m Books > GetById : " + e.Message);
+				return Results.Problem(detail: e.Message, statusCode: 500);
+			}
 
 		});
 
 		books.MapPost("/", (BookService bookService, Book book) =>
 		{
-			bool result = bookService.Add(book);
-			if(!result)
-				return Results.StatusCode(500);
-			
-			return Results.Created();
+			try
+			{
+				Book result = bookService.Add(book);
+				return Results.Created($"/api/v1/books/{result.Id}", result);
+			}
+			catch (ArgumentException argumentException)
+			{
+				return Results.BadRequest(argumentException.Message);
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine("\x1b[41mError \x1b[0m Books > Add : " + e.Message);
+				return Results.Problem(detail: e.Message, statusCode: 500);
+			}
 		});
 
-		books.MapPut("/{id}", (BookService bookService, int id, Book book) =>
+		books.MapPut("/{id}", (BookService bookService, Book book) =>
 		{
-			bool result = bookService.Update(book);
-			if(!result)
-				return Results.StatusCode(500);
+			try
+			{
+				Book result = bookService.Update(book);
 
-			return Results.Ok();
+				return Results.Ok(result);
+			}
+			catch (ArgumentException argumentException)
+			{
+				return Results.BadRequest(argumentException.Message);
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine("\x1b[41mError \x1b[0m Books > Update : " + e.Message);
+				return Results.Problem(detail: e.Message, statusCode: 500);
+			}
 		});
 
 		books.MapDelete("/{id}", (BookService bookService, int id) =>
 		{
-			bool result = bookService.Delete(id);
-			if(!result)
-				return Results.StatusCode(500);
-			
-			return Results.Ok();
+			try
+			{
+				bookService.Delete(id);
+				return Results.NoContent();
+			}
+			catch (Exception e) when (e is IndexOutOfRangeException or KeyNotFoundException)
+			{
+				return Results.NotFound(e.Message);
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine("\x1b[41mError \x1b[0m Books > Delete : " + e.Message);
+				return Results.Problem(detail: e.Message, statusCode: 500);
+			}
 		});
 	}
 }

@@ -4,53 +4,38 @@ namespace Application.Service;
 
 public class LibraryService(BookService bookService, MemberService memberService)
 {
-	private List<Book>? _books = bookService.Get();
-	private List<Member>? _members = memberService.Get();
+	public virtual List<Book>? GetBorrowed() => bookService.Get()?.FindAll(b => b.IsBorrowed);
 
-	public virtual List<Book>? GetBorrowed()
-	{
-		var borrowedBooks = (_books ?? bookService.Get())?.FindAll(b => b.IsBorrowed);
-		_members ??= memberService.Get();
-		if (borrowedBooks != null)
-			foreach (var book in borrowedBooks)
-				book.MemberName = _members?.Find(m => m.Id == book.BorrowedBy)?.Name ?? "unknown";
-		return borrowedBooks;
-	}
+	public virtual List<Book>? GetAvailable() => bookService.Get()?.FindAll(b => b.IsBorrowed == false);
 
-	public virtual List<Book>? GetAvailable()
+	public virtual Book ReturnBook(int bookId) 
 	{
-		return (bookService.Get())?.FindAll(b => b.IsBorrowed == false);
-	}
-
-	public virtual bool ReturnBook(int bookId)
-	{
-		_books ??= bookService.Get();
-		Book? book = null;
-		if ((_books == null || _books.Count == 0) || (book ??= _books?.Find(b => b.Id == bookId)) == null)
-			return false;
+		Book? book = bookService.GetById(bookId);
+		
+		if(book == null)
+			throw new KeyNotFoundException();
+		
 		book.IsBorrowed = false;
-		book.BorrowedBy = null;
-		book.BorrowedDate = null;
 		book.Borrower = null;
+		book.BorrowedDate = null;
+		book.BorrowedBy = null;
+
 		return bookService.Update(book);
 	}
 
-	public virtual bool BorrowBook(int bookId, int memberId)
+	public Book BorrowBook(int bookId, int memberId)
 	{
-		_books ??= bookService.Get();
-		if (_books == null || _books.Count == 0)
-			return false;
-		if (memberService.GetById(memberId) == null)
-			return false;
-		Book? book = _books.Find(b => b.Id == bookId);
-		if (book == null)
-			return false;
+		Book? book = bookService.GetById(bookId);
+		Member? member = memberService.GetById(memberId);
+		
+		if(book == null || member == null)
+			throw new KeyNotFoundException("Book or Member not found");
+		
 		book.IsBorrowed = true;
-		book.Borrower = _members?.Find(m => m.Id == memberId);
-		book.BorrowedBy = memberId;
-		book.BorrowedDate = DateOnly.FromDateTime(DateTime.Today);
-		_books[_books.FindIndex(b => b.Id == book.Id)] = book;
-
+		book.Borrower = member;
+		book.BorrowedBy = member.Id;
+		book.BorrowedDate = DateOnly.FromDateTime(DateTime.Now);
+		
 		return bookService.Update(book);
 	}
 }
