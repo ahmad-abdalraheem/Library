@@ -1,74 +1,57 @@
 using Domain.Entities;
 using Domain.Repository;
-using static System.Console;
 
 namespace Application.Service;
 
-public class BookService(IBookRepository bookRepository)
+public sealed class BookService(IBookRepository bookRepository)
 {
-	private readonly IBookRepository _bookRepository = bookRepository ?? throw new ArgumentNullException(nameof(bookRepository));
+	private readonly IBookRepository _bookRepository =
+		bookRepository ?? throw new ArgumentNullException(nameof(bookRepository));
 
-	public virtual bool Add(Book book)
+	public Book Add(Book book)
 	{
-		try
-		{
-			return _bookRepository.Add(book);
-		}
-		catch (Exception e)
-		{
-			WriteLine(e.Message);
-			return false;
-		}
-	}
+		if (book == null)
+			throw new ArgumentNullException(nameof(book), "Book cannot be null.");
 
-	public virtual bool Update(Book book)
-	{
-		try
-		{
-			return _bookRepository.Update(book);
-		}
-		catch (Exception e)
-		{
-			WriteLine(e.Message);
-			return false;
-		}
+		book.Title = book.Title.Trim();
+		book.Author = book.Author.Trim();
+		if (book.Title.Length == 0 || book.Author.Length == 0)
+			throw new ArgumentException("Title and Author are required and cannot be empty");
+
+		book.Id = 0;
+		book.IsBorrowed = false;
+
+		return _bookRepository.Add(book);
 	}
 
-	public virtual bool Delete(int bookId)
+	public Book Update(Book book)
 	{
-		try
-		{
-			return _bookRepository.Delete(bookId);
-		}
-		catch (Exception e)
-		{
-			WriteLine(e.Message);
-			return false;
-		}
+		book.Title = book.Title.Trim();
+		book.Author = book.Author.Trim();
+		if (book.Title.Length == 0 || book.Author.Length == 0)
+			throw new ArgumentException("Title and Author are required and cannot be empty");
+
+		return _bookRepository.Update(book);
 	}
-	public virtual List<Book>? Get()
+
+	public bool Delete(int bookId)
 	{
-		try
-		{
-			return _bookRepository.Get();
-		}
-		catch (Exception e)
-		{
-			WriteLine(e.Message);
-			return null;
-		}
+		if (bookId <= 0)
+			throw new IndexOutOfRangeException("Book Id cannot be negative.");
+
+		return _bookRepository.Delete(bookId);
 	}
-	
-	public virtual Book? GetById(int bookId)
+
+	public List<Book>? Get()
 	{
-		try
-		{
-			return _bookRepository.GetById(bookId);
-		}
-		catch (Exception e)
-		{
-			WriteLine(e.Message);
-			return null;
-		}
+		return _bookRepository.Get();
+	}
+
+	public Book? GetById(int bookId)
+	{
+		if (bookId <= 0)
+			throw new IndexOutOfRangeException("Book Id cannot be negative.");
+		
+		return _bookRepository.GetById(bookId);
 	}
 }

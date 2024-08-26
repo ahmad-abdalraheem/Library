@@ -1,6 +1,4 @@
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Infrastructure.DataHandler
 {
@@ -90,12 +88,12 @@ namespace Infrastructure.DataHandler
 			}
 		}
 
-		public TBook? GetById(int id)
+		public TBook? GetById(int memberId)
 		{
 			try
 			{
 				Book? query = (from book in context.Books
-					where book.Id == id
+					where book.Id == memberId
 					join member in context.Members
 						on book.BorrowedBy equals member.Id into bookMembers
 					from member in bookMembers.DefaultIfEmpty()

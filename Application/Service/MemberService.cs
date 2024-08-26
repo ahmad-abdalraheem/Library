@@ -1,55 +1,47 @@
 using Domain.Entities;
 using Domain.Repository;
-using static System.Console;
 
 namespace Application.Service;
 
-public class MemberService(IMemberRepository memberRepository)
+public sealed class MemberService(IMemberRepository memberRepository)
 {
 	private readonly IMemberRepository _memberRepository =
 		memberRepository ?? throw new ArgumentNullException(nameof(memberRepository));
 
-	public virtual bool Add(Member member)
+	public Member Add(Member member)
 	{
-		try
-		{
-			return _memberRepository.Add(member);
-		}
-		catch (Exception e)
-		{
-			WriteLine(e.Message);
-			return false;
-		}
+		member.Id = 0;
+		member.Name = member.Name.Trim();
+		if (member.Name.Length == 0)
+			throw new ArgumentException("Name cannot be empty");
+
+		return _memberRepository.Add(member);
 	}
 
-	public virtual bool Update(Member member)
+	public Member Update(Member member)
 	{
-		try
-		{
-			return _memberRepository.Update(member);
-		}
-		catch (Exception e)
-		{
-			WriteLine(e.Message);
-			return false;
-		}
+		member.Name = member.Name.Trim();
+		if (member.Name.Length == 0)
+			throw new ArgumentException("Name cannot be empty");
+
+		return _memberRepository.Update(member);
 	}
 
-	public virtual bool Delete(int memberId)
+	public bool Delete(int memberId)
 	{
-		try
-		{
-			return _memberRepository.Delete(memberId);
-		}
-		catch (Exception e)
-		{
-			WriteLine(e.Message);
-			return false;
-		}
+		if (memberId <= 0)
+			throw new IndexOutOfRangeException("Member Id cannot be negative or zero");
+
+		return _memberRepository.Delete(memberId);
 	}
 
-	// should I use try-catch? while member handler already catch the exception and return null
-	public virtual List<Member>? Get() => _memberRepository.Get();
+	public List<Member>? Get() => _memberRepository.Get();
 
-	public virtual Member? GetById(int memberId) => _memberRepository.GetById(memberId);
+	public Member? GetById(int memberId)
+	{
+		if (memberId <= 0)
+			throw new IndexOutOfRangeException("Member Id cannot be negative or zero");
+
+		return _memberRepository.GetById(memberId);
+	}
 }

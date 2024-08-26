@@ -15,26 +15,13 @@ public class LibraryContext(DbContextOptions<LibraryContext> options) : DbContex
 			.OnDelete(DeleteBehavior.SetNull);
 	}
 
-	public override int SaveChanges()
+	public void UpdateIsBorrowedStatus(Member borrower)
 	{
-		UpdateIsBorrowedStatus();
-		return base.SaveChanges();
-	}
-
-	public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-	{
-		UpdateIsBorrowedStatus();
-		return await base.SaveChangesAsync(cancellationToken);
-	}
-
-	private void UpdateIsBorrowedStatus()
-	{
-		var entries = ChangeTracker.Entries<Book>()
-			.Where(e => e is { State: EntityState.Modified, Entity.BorrowedBy: null });
-
-		foreach (var entry in entries)
+		List<Book> borrowedBooks = Books.Where(b => b.Borrower == borrower).ToList();
+		foreach (var book in borrowedBooks)
 		{
-			entry.Entity.IsBorrowed = false;
+			book.IsBorrowed = false;
+			book.BorrowedDate = null;
 		}
 	}
 }

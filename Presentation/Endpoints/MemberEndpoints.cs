@@ -11,49 +11,98 @@ public static class MemberEndpoints
 
 		members.MapGet("/", (MemberService memberService) =>
 		{
-			List<Member>? membersList = memberService.Get();
-			if(membersList is null)
-				return Results.NotFound();
-			
-			return Results.Ok(membersList);
+			try
+			{
+				List<Member>? membersList = memberService.Get();
 
+				return Results.Ok(membersList);
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine("\x1b[41mError\x1b[0m> Members >  Get > " + e.Message);
+				return Results.Problem(statusCode: 500, detail: e.Message);
+			}
 		});
 
 		members.MapGet("/{id}", (MemberService membersService, int id) =>
 		{
-			Member? member = membersService.GetById(id);
-			if(member is null)
-				return Results.NotFound();
+			try
+			{
+				Member? member = membersService.GetById(id);
+				if (member is null)
+					return Results.NotFound();
 
-			return Results.Ok(member);
-
+				return Results.Ok(member);
+			}
+			catch (Exception e) when (e is IndexOutOfRangeException or KeyNotFoundException)
+			{
+				return Results.NotFound(e.Message);
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine($"\x1b[41mError\x1b[0m Members > GetById > {e.Message}");
+				return Results.Problem(statusCode: 500, detail: e.Message);
+			}
 		});
 
 		members.MapPost("/", (MemberService memberService, Member member) =>
 		{
-			bool result = memberService.Add(member);
-			if(!result)
-				return Results.StatusCode(500);
-			
-			return Results.Created();
+			try
+			{
+				member.Id = 0;
+				Member result = memberService.Add(member);
+
+				return Results.Created($"/api/v1/members/{result.Id}", result);
+			}
+			catch (ArgumentException argumentException)
+			{
+				return Results.BadRequest(argumentException.Message);
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine($"\x1b[41mError\x1b[0m Members > Add > {e.Message}");
+				return Results.Problem(statusCode: 500, detail: e.Message);
+			}
 		});
 
-		members.MapPut("/{id}", (MemberService memberService, int id, Member member) =>
+		members.MapPut("/", (MemberService memberService, Member member) =>
 		{
-			bool result = memberService.Update(member);
-			if(!result)
-				return Results.StatusCode(500);
+			try
+			{
+				Member result = memberService.Update(member);
 
-			return Results.Ok();
+				return Results.Ok(result);
+			}
+			catch (ArgumentException argumentException)
+			{
+				return Results.BadRequest(argumentException.Message);
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine($"\x1b[41mError\x1b[0m> Members > Update > {e.Message}");
+				return Results.Problem(statusCode: 500, detail: e.Message);
+			}
 		});
 
 		members.MapDelete("/{id}", (MemberService memberService, int id) =>
 		{
-			bool result = memberService.Delete(id);
-			if(!result)
-				return Results.StatusCode(500);
-			
-			return Results.Ok();
+			try
+			{
+				if (id <= 0)
+					throw new IndexOutOfRangeException("Member Id cannot be negative or zero.");
+
+				memberService.Delete(id);
+				return Results.NoContent();
+			}
+			catch (Exception e) when (e is IndexOutOfRangeException or KeyNotFoundException)
+			{
+				return Results.NotFound(e.Message);
+			}
+			catch (Exception e)
+			{
+				Console.Error.WriteLine($"\x1b[41mError\x1b[0m> Members > Delete > {e.Message}");
+				return Results.Problem(statusCode: 500, detail: e.Message);
+			}
 		});
 	}
 }

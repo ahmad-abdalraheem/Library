@@ -1,5 +1,4 @@
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.DataHandler
 {
@@ -18,7 +17,7 @@ namespace Infrastructure.DataHandler
 			}
 			catch (Exception e)
 			{
-				Console.Error.WriteLine(e);
+				Console.Error.WriteLine("" + e.Message);
 				return false;
 			}
 		}
@@ -46,7 +45,10 @@ namespace Infrastructure.DataHandler
 			try
 			{
 				Member? member = context.Members.Find(memberId);
-
+				if (member == null)
+					return false;
+				
+				context.UpdateIsBorrowedStatus(member);
 				context.Members.Remove(member);
 				context.SaveChanges();
 				return true;
@@ -62,7 +64,7 @@ namespace Infrastructure.DataHandler
 		{
 			try
 			{
-				return context.Members.AsNoTracking().ToList() as List<TMember>;
+				return context.Members.ToList() as List<TMember>;
 			}
 			catch (Exception e)
 			{
@@ -71,11 +73,11 @@ namespace Infrastructure.DataHandler
 			}
 		}
 
-		public TMember? GetById(int id)
+		public TMember? GetById(int memberId)
 		{
 			try
 			{
-				return (TMember?) context.Members.AsNoTracking().FirstOrDefault(x => x.Id == id);
+				return (TMember?) context.Members.Find(memberId);
 			}
 			catch (Exception e)
 			{

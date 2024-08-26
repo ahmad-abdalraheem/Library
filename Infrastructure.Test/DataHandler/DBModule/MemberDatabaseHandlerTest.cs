@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Xunit;
 using Domain.Entities;
 using Infrastructure.DataHandler;
+using Microsoft.EntityFrameworkCore;
 using Moq;
+using Xunit;
 
 public class MemberDatabaseHandlerTest
 {
