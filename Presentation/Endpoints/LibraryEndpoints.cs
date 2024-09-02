@@ -13,7 +13,7 @@ public static class LibraryEndpoints
 		{
 			try
 			{
-				List<Book>? books = libraryService.GetBorrowed();
+				List<GetBookDto> books = libraryService.GetBorrowed();
 
 				return Results.Ok(books);
 			}
@@ -28,7 +28,7 @@ public static class LibraryEndpoints
 		{
 			try
 			{
-				List<Book>? books = libraryService.GetAvailable();
+				List<GetBookDto> books = libraryService.GetAvailable();
 
 				return Results.Ok(books);
 			}
@@ -46,7 +46,7 @@ public static class LibraryEndpoints
 				if (bookId <= 0)
 					throw new IndexOutOfRangeException("Book Id cannot be negative or zero.");
 
-				Book book = libraryService.ReturnBook(bookId);
+				GetBookDto book = libraryService.ReturnBook(bookId);
 				return Results.Ok(book);
 			}
 			catch (Exception e) when (e is KeyNotFoundException or IndexOutOfRangeException)
@@ -69,7 +69,7 @@ public static class LibraryEndpoints
 				if (memberId <= 0)
 					throw new IndexOutOfRangeException("Member Id cannot be negative or zero.");
 
-				libraryService.BorrowBook(bookId, memberId);
+				GetBookDto book = libraryService.BorrowBook(bookId, memberId);
 				return Results.Ok(book);
 			}
 			catch (Exception e) when (e is KeyNotFoundException or IndexOutOfRangeException)

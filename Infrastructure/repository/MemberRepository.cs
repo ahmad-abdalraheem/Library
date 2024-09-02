@@ -1,6 +1,5 @@
 using Domain.Entities;
 using Domain.Repository;
-using Infrastructure.DataHandler;
 
 namespace Application.Repository;
 
@@ -32,12 +31,12 @@ public class MemberRepository(LibraryContext context) : IMemberRepository
 		return true;
 	}
 
-	public List<Member>? Get()
+	public List<Member> Get()
 	{
 		return context.Members.ToList();
 	}
 
-	public Member? GetById(int memberId)
+	public Member GetById(int memberId)
 	{
 		Member? member = context.Members.Find(memberId);
 		if (member == null)

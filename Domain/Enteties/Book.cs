@@ -25,8 +25,4 @@ public class Book : IEntity
 	
 	[ForeignKey(name: "BorrowedBy")]
 	public Member? Borrower { get; set; }
-	
-	[NotMapped] 
-	public string? MemberName { get; set; }
-
 }

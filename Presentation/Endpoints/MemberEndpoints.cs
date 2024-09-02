@@ -1,5 +1,6 @@
 using Application.Service;
 using Domain.Entities;
+using FluentValidation;
 
 namespace Presentation.Endpoints;
 
@@ -28,7 +29,11 @@ public static class MemberEndpoints
 		{
 			try
 			{
+				if (id <= 0)
+					throw new IndexOutOfRangeException("Member Id cannot be negative or zero");
+				
 				Member? member = membersService.GetById(id);
+				
 				if (member is null)
 					return Results.NotFound();
 
@@ -45,18 +50,17 @@ public static class MemberEndpoints
 			}
 		});
 
-		members.MapPost("/", (MemberService memberService, Member member) =>
+		members.MapPost("/", (MemberService memberService, AddMemberDto member) =>
 		{
 			try
 			{
-				member.Id = 0;
 				Member result = memberService.Add(member);
 
 				return Results.Created($"/api/v1/members/{result.Id}", result);
 			}
-			catch (ArgumentException argumentException)
+			catch (ValidationException validationException)
 			{
-				return Results.BadRequest(argumentException.Message);
+				return Results.BadRequest(validationException.Message);
 			}
 			catch (Exception e)
 			{
@@ -65,7 +69,7 @@ public static class MemberEndpoints
 			}
 		});
 
-		members.MapPut("/", (MemberService memberService, Member member) =>
+		members.MapPut("/", (MemberService memberService, UpdateMemberDto member) =>
 		{
 			try
 			{
@@ -73,9 +77,9 @@ public static class MemberEndpoints
 
 				return Results.Ok(result);
 			}
-			catch (ArgumentException argumentException)
+			catch (ValidationException validationException)
 			{
-				return Results.BadRequest(argumentException.Message);
+				return Results.BadRequest(validationException.Message);
 			}
 			catch (Exception e)
 			{

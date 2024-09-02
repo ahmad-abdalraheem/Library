@@ -1,10 +1,7 @@
 using Application.Repository;
 using Application.Service;
-using Domain.Entities;
 using Domain.Repository;
-using Infrastructure.DataHandler;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {

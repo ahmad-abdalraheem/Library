@@ -1,3 +1,5 @@
+using Application.MappingProfile;
+
 public static class Configuration
 {
 	public static void RegisterServices(this WebApplicationBuilder builder)
@@ -5,7 +7,8 @@ public static class Configuration
 		builder.Services
 			.AddEndpointsApiExplorer()
 			.AddSwaggerGen()
-			.AddApplicationServices();
+			.AddApplicationServices()
+			.AddAutoMapper(typeof(BookProfile).Assembly);
 	}
 
 	public static void RegisterMiddlewares(this WebApplication app)

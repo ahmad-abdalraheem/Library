@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities;
 
-public class AddMember
+public class AddMemberDto
 {
 	[Required]
 	[MaxLength(50)]
