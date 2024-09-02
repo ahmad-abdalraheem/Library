@@ -1,47 +1,29 @@
+using AutoMapper;
 using Domain.Entities;
 using Domain.Repository;
 
 namespace Application.Service;
 
-public sealed class MemberService(IMemberRepository memberRepository)
+public sealed class MemberService(IMemberRepository memberRepository, IMapper mapper)
 {
 	private readonly IMemberRepository _memberRepository =
 		memberRepository ?? throw new ArgumentNullException(nameof(memberRepository));
-
-	public Member Add(Member member)
+	public GetMemberDto Add(AddMemberDto member)
 	{
-		member.Id = 0;
-		member.Name = member.Name.Trim();
-		if (member.Name.Length == 0)
-			throw new ArgumentException("Name cannot be empty");
-
-		return _memberRepository.Add(member);
+		return mapper.Map<GetMemberDto>(_memberRepository.Add(mapper.Map<Member>(member)));
 	}
 
-	public Member Update(Member member)
+	public GetMemberDto Update(UpdateMemberDto member)
 	{
-		member.Name = member.Name.Trim();
-		if (member.Name.Length == 0)
-			throw new ArgumentException("Name cannot be empty");
-
-		return _memberRepository.Update(member);
+		return mapper.Map<GetMemberDto>(_memberRepository.Update(mapper.Map<Member>(member)));
 	}
 
-	public bool Delete(int memberId)
+	public void Delete(int memberId)
 	{
-		if (memberId <= 0)
-			throw new IndexOutOfRangeException("Member Id cannot be negative or zero");
-
-		return _memberRepository.Delete(memberId);
+		_memberRepository.Delete(memberId);
 	}
 
-	public List<Member>? Get() => _memberRepository.Get();
+	public List<GetMemberDto>? Get() => mapper.Map<List<GetMemberDto>>(_memberRepository.Get());
 
-	public Member? GetById(int memberId)
-	{
-		if (memberId <= 0)
-			throw new IndexOutOfRangeException("Member Id cannot be negative or zero");
-
-		return _memberRepository.GetById(memberId);
-	}
+	public GetMemberDto? GetById(int memberId) => mapper.Map<GetMemberDto>(_memberRepository.GetById(memberId));
 }

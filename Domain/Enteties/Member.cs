@@ -14,5 +14,6 @@ public class Member : IEntity
 	public required string Name { get; set; }
 	
 	[EmailAddress]
+	[MaxLength(50)]
 	public string? Email { get; set; }
 }

@@ -1,5 +1,9 @@
+using System.ComponentModel.DataAnnotations;
 using Application.Service;
 using Domain.Entities;
+using FluentValidation;
+using Presentation.Validation;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace Presentation.Endpoints;
 
@@ -13,7 +17,7 @@ public static class BooksEndpoints
 		{
 			try
 			{
-				List<Book>? booksList = bookService.Get();
+				List<GetBookDto>? booksList = bookService.Get();
 				return Results.Ok(booksList);
 			}
 			catch (Exception e)
@@ -27,10 +31,10 @@ public static class BooksEndpoints
 		{
 			try
 			{
-				Book? book = booksService.GetById(id);
+				GetBookDto? book = booksService.GetById(id);
 				if (book == null)
 					throw new KeyNotFoundException("No book with Id : " + id);
-				
+
 				return Results.Ok(book);
 			}
 			catch (Exception e) when (e is IndexOutOfRangeException or KeyNotFoundException)
@@ -42,19 +46,20 @@ public static class BooksEndpoints
 				Console.Error.WriteLine("\x1b[41mError \x1b[0m Books > GetById : " + e.Message);
 				return Results.Problem(detail: e.Message, statusCode: 500);
 			}
-
 		});
 
-		books.MapPost("/", (BookService bookService, Book book) =>
+		books.MapPost("/", (BookService bookService, AddBookDto book) =>
 		{
 			try
 			{
-				Book result = bookService.Add(book);
+				new AddBookValidator().ValidateAndThrow(book);
+
+				GetBookDto result = bookService.Add(book);
 				return Results.Created($"/api/v1/books/{result.Id}", result);
 			}
-			catch (ArgumentException argumentException)
+			catch (ValidationException validationException)
 			{
-				return Results.BadRequest(argumentException.Message);
+				return Results.BadRequest(validationException.Message);
 			}
 			catch (Exception e)
 			{
@@ -63,17 +68,18 @@ public static class BooksEndpoints
 			}
 		});
 
-		books.MapPut("/{id}", (BookService bookService, Book book) =>
+		books.MapPut("/", (BookService bookService, UpdateBookDto book) =>
 		{
 			try
 			{
-				Book result = bookService.Update(book);
+				new UpdateBookValidator().ValidateAndThrow(book);
+				GetBookDto result = bookService.Update(book);
 
 				return Results.Ok(result);
 			}
-			catch (ArgumentException argumentException)
+			catch (ValidationException validationException)
 			{
-				return Results.BadRequest(argumentException.Message);
+				return Results.BadRequest(validationException.Message);
 			}
 			catch (Exception e)
 			{
